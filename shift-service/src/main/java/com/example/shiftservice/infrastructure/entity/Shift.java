@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,10 +18,10 @@ public class Shift {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private long employeeId;
+    private String employeeEmail;
 
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private LocalDate shiftDate;
 
     @Temporal(TemporalType.TIME)
     private LocalTime startTime;
@@ -29,9 +29,9 @@ public class Shift {
     @Temporal(TemporalType.TIME)
     private LocalTime endTime;
 
-    public Shift(long employeeId, Date date, LocalTime startTime, LocalTime endTime) {
-        this.employeeId = employeeId;
-        this.date = date;
+    public Shift(String employeeEmail, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
+        this.employeeEmail = employeeEmail;
+        this.shiftDate = shiftDate;
         this.startTime = startTime;
         this.endTime = endTime;
     }
