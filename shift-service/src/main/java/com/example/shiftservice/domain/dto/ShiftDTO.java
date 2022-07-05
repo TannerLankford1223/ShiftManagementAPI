@@ -19,6 +19,9 @@ import java.time.LocalTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ShiftDTO {
 
+    @JsonProperty("shift_id")
+    private long id;
+
     @JsonProperty("employee_email")
     @Email(message = "Please enter a valid email address")
     private String employeeEmail;
