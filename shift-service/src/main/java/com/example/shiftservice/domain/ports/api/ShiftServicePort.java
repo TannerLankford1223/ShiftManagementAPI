@@ -6,7 +6,7 @@ public interface ShiftServicePort {
 
     ShiftDTO createShift(ShiftDTO shiftRequest);
 
-    ShiftDTO getEmployeeShift(String email);
+    ShiftDTO getEmployeeShift(ShiftDTO shiftDTO);
 
     ShiftDTO updateEmployeeShift(ShiftDTO shiftRequest);
 

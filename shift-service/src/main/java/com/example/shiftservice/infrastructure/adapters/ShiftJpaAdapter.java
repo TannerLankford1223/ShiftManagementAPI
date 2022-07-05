@@ -5,6 +5,7 @@ import com.example.shiftservice.infrastructure.entity.Shift;
 import com.example.shiftservice.infrastructure.persistence.ShiftRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -22,7 +23,7 @@ public class ShiftJpaAdapter implements ShiftPersistencePort {
     }
 
     @Override
-    public Optional<Shift> getShift(Shift shift) {
+    public Optional<Shift> getShift(String employeeEmail, LocalDate shiftDate) {
         return Optional.empty();
     }
 

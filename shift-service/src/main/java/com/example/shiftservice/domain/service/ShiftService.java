@@ -20,7 +20,7 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
-    public ShiftDTO getEmployeeShift(String email) {
+    public ShiftDTO getEmployeeShift(ShiftDTO shiftDTO) {
         return null;
     }
 
