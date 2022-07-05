@@ -25,11 +25,6 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
-    public ShiftDTO updateEmployeeShift(ShiftDTO shiftRequest) {
-        return null;
-    }
-
-    @Override
     public boolean deleteEmployeeShift(long shiftId) {
         return false;
     }

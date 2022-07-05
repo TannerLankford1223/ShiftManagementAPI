@@ -8,7 +8,5 @@ public interface ShiftServicePort {
 
     ShiftDTO getEmployeeShift(ShiftDTO shiftDTO);
 
-    ShiftDTO updateEmployeeShift(ShiftDTO shiftRequest);
-
     boolean deleteEmployeeShift(long shiftId);
 }
