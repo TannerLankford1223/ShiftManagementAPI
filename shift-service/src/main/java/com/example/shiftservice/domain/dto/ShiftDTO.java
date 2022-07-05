@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class ShiftDTO {
 
     @JsonProperty("date")
     @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}")
-    private Date shiftDate;
+    private LocalDate shiftDate;
 
     @JsonProperty("start_time")
     private LocalTime startTime;
