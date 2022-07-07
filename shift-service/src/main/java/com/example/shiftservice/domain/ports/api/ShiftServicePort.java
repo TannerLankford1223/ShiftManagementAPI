@@ -20,4 +20,6 @@ public interface ShiftServicePort {
     void postWorkSchedule(List<ShiftRequest> shiftRequests);
 
     boolean deleteEmployeeShift(long shiftId);
+
+    boolean isValidShiftRequest(ShiftRequest shiftRequest);
 }
