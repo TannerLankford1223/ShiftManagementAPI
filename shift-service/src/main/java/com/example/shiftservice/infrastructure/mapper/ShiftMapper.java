@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-abstract class ShiftMapper {
+public abstract class ShiftMapper {
     public ShiftResponse shiftToShiftResponse(Shift shift, Employee employee) {
         return ShiftResponse.builder()
                 .id(shift.getId())
