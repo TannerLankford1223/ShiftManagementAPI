@@ -1,12 +1,13 @@
 package com.example.shiftservice.domain.ports.api;
 
-import com.example.shiftservice.domain.dto.ShiftDTO;
+import com.example.shiftservice.domain.dto.ShiftRequest;
+import com.example.shiftservice.domain.dto.ShiftResponse;
 
 public interface ShiftServicePort {
 
-    ShiftDTO createShift(ShiftDTO shiftRequest);
+    ShiftResponse createShift(ShiftRequest shiftRequest);
 
-    ShiftDTO getEmployeeShift(ShiftDTO shiftDTO);
+    ShiftResponse getEmployeeShift(long shiftId);
 
     boolean deleteEmployeeShift(long shiftId);
 }

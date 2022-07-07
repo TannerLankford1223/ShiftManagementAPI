@@ -1,6 +1,7 @@
 package com.example.shiftservice.application.controller;
 
-import com.example.shiftservice.domain.dto.ShiftDTO;
+import com.example.shiftservice.domain.dto.ShiftRequest;
+import com.example.shiftservice.domain.dto.ShiftResponse;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +17,12 @@ public class ShiftController {
     }
 
     @PostMapping("/new-shift")
-    public ShiftDTO createShift(@RequestBody ShiftDTO shift) {
+    public ShiftResponse createShift(@RequestBody ShiftRequest shift) {
         return null;
     }
 
     @GetMapping("/{email}")
-    public ShiftDTO getEmployeeShift(@PathVariable String email) {
-        return null;
-    }
-
-    @PutMapping("/update-shift")
-    public ShiftDTO updateEmployeeShift(@RequestBody ShiftDTO shift) {
+    public ShiftResponse getEmployeeShift(@PathVariable String email) {
         return null;
     }
 
