@@ -5,6 +5,8 @@ import com.example.shiftservice.infrastructure.entity.Shift;
 import com.example.shiftservice.infrastructure.persistence.ShiftRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +26,21 @@ public class ShiftJpaAdapter implements ShiftPersistencePort {
     @Override
     public Optional<Shift> getShift(long shiftId) {
         return shiftRepo.getShiftById(shiftId);
+    }
+
+    @Override
+    public List<Shift> getWorkSchedule(LocalDate startDate, LocalDate endDate) {
+        return shiftRepo.findAllByShiftDateBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<Shift> getEmployeeSchedule(long employeeId, LocalDate startDate, LocalDate endDate) {
+        return shiftRepo.findAllByEmployeeIdAndShiftDateBetween(employeeId, startDate, endDate);
+    }
+
+    @Override
+    public void postWorkSchedule(List<Shift> shifts) {
+        shiftRepo.saveAll(shifts);
     }
 
     @Override
