@@ -2,17 +2,18 @@ package com.example.shiftservice.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ShiftResponse {
 
     @JsonProperty("shift_id")
@@ -29,7 +30,6 @@ public class ShiftResponse {
     private String employeeEmail;
 
     @JsonProperty("date")
-    @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}")
     private LocalDate shiftDate;
 
     @JsonProperty("start_time")
