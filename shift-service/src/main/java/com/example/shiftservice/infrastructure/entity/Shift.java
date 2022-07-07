@@ -18,7 +18,7 @@ public class Shift {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String employeeEmail;
+    private long employeeId;
 
     @Temporal(TemporalType.DATE)
     private LocalDate shiftDate;
@@ -29,8 +29,8 @@ public class Shift {
     @Temporal(TemporalType.TIME)
     private LocalTime endTime;
 
-    public Shift(String employeeEmail, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
-        this.employeeEmail = employeeEmail;
+    public Shift(long employeeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
+        this.employeeId = employeeId;
         this.shiftDate = shiftDate;
         this.startTime = startTime;
         this.endTime = endTime;
