@@ -9,13 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public abstract class ShiftMapper {
     public ShiftResponse shiftToShiftResponse(Shift shift) {
-        return ShiftResponse.builder()
-                .id(shift.getId())
-                .employeeId(shift.getEmployeeId())
-                .shiftDate(shift.getShiftDate())
-                .startTime(shift.getStartTime())
-                .endTime(shift.getEndTime())
-                .build();
+        return new ShiftResponse(shift.getId(), shift.getEmployeeId(), shift.getShiftDate(),
+                shift.getStartTime(), shift.getEndTime());
     }
 
     @Mapping(target = "shift.id", ignore = true)
