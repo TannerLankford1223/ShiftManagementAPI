@@ -1,6 +1,5 @@
 package com.example.shiftservice.infrastructure.mapper;
 
-import com.example.shiftservice.domain.dto.Employee;
 import com.example.shiftservice.domain.dto.ShiftRequest;
 import com.example.shiftservice.domain.dto.ShiftResponse;
 import com.example.shiftservice.infrastructure.entity.Shift;
@@ -9,12 +8,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public abstract class ShiftMapper {
-    public ShiftResponse shiftToShiftResponse(Shift shift, Employee employee) {
+    public ShiftResponse shiftToShiftResponse(Shift shift) {
         return ShiftResponse.builder()
                 .id(shift.getId())
-                .firstName(employee.getFirstName())
-                .lastName(employee.getLastName())
-                .employeeEmail(employee.getEmail())
+                .employeeId(shift.getEmployeeId())
                 .shiftDate(shift.getShiftDate())
                 .startTime(shift.getStartTime())
                 .endTime(shift.getEndTime())
