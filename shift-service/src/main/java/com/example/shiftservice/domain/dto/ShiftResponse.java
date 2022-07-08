@@ -21,7 +21,7 @@ public class ShiftResponse {
     @JsonProperty("employee_id")
     private long employeeId;
 
-    @JsonProperty("date")
+    @JsonProperty("shift_date")
     private LocalDate shiftDate;
 
     @JsonProperty("start_time")

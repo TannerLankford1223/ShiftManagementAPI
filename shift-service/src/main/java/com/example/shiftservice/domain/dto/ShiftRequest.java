@@ -19,7 +19,7 @@ public class ShiftRequest{
     @JsonProperty("employee_id")
     private long employeeId;
 
-    @JsonProperty("date")
+    @JsonProperty("shift_date")
     @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}")
     private LocalDate shiftDate;
 
