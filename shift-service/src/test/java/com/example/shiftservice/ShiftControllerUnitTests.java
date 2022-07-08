@@ -51,8 +51,8 @@ public class ShiftControllerUnitTests {
     @BeforeEach
     public void init() {
         this.shiftMapper = new ShiftMapperImpl();
-        this.request = new ShiftRequest(25L, LocalDate.now().plusDays(2), LocalTime.parse("09:30"),
-                LocalTime.parse("12:45"));
+        this.request = new ShiftRequest(25L, LocalDate.now().plusDays(2),
+                LocalTime.parse("09:30"), LocalTime.parse("12:45"));
         this.shift = shiftMapper.shiftRequestToShift(request);
         this.shift.setId(405L);
         this.response = shiftMapper.shiftToShiftResponse(this.shift);
@@ -62,28 +62,30 @@ public class ShiftControllerUnitTests {
     public void createShift_ReturnsShiftResponse() throws Exception {
         Mockito.when(shiftService.createShift(request)).thenReturn(response);
 
-       MvcResult result =  this.mockMvc.perform(MockMvcRequestBuilders.post("/api/shift/new-shift")
+       this.mockMvc.perform(MockMvcRequestBuilders.post("/api/shift/new-shift")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk()).andReturn();
-
-        String content = result.getResponse().getContentAsString();
-
-        assertEquals("Shift successfully created", content);
+                .andExpect(status().isOk())
+               .andExpect(jsonPath("$.shift_id").value(shift.getId()))
+               .andExpect(jsonPath("$.employee_id").value(shift.getEmployeeId()))
+               .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate().toString()))
+               .andExpect(jsonPath("$.start_time").value("09:30 AM"))
+               .andExpect(jsonPath("$.end_time").value("12:45 PM"));
     }
 
     @Test
     public void getEmployeeShift_ReturnsShiftResponse() throws Exception {
-        Mockito.when(shiftService.getEmployeeShift(request.getEmployeeId())).thenReturn(response);
+        Mockito.when(shiftService.getEmployeeShift(shift.getId())).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/{shiftId}", shift.getId()))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/{shiftId}", shift.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.shift_id").value(shift.getId()))
                 .andExpect(jsonPath("$.employee_id").value(shift.getEmployeeId()))
-                .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate()))
-                .andExpect(jsonPath("$.start_time").value(shift.getStartTime()))
-                .andExpect(jsonPath("$.end_time").value(shift.getEndTime()));
+                .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate().toString()))
+                .andExpect(jsonPath("$.start_time").value("09:30 AM"))
+                .andExpect(jsonPath("$.end_time").value("12:45 PM"));
     }
 
     @Test
@@ -134,7 +136,7 @@ public class ShiftControllerUnitTests {
 
         String content = result.getResponse().getContentAsString();
 
-        assertEquals("Schedule added successfully", content);
+        assertEquals("Work schedule successfully posted", content);
     }
 
     @Test

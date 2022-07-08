@@ -102,7 +102,7 @@ public class ShiftServiceUnitTests {
 
         assertEquals(16L, shiftResponse.getEmployeeId());
         assertEquals(LocalDate.now().plusDays(1), shiftResponse.getShiftDate());
-        assertEquals(LocalTime.parse("08:00"), shiftResponse.getStartTime());
+        assertEquals("08:00 AM", shiftResponse.getStartTime());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class ShiftServiceUnitTests {
         assertEquals(0L, shiftResponse.getId());
         assertEquals(16L, shiftResponse.getEmployeeId());
         assertEquals(LocalDate.now().plusDays(1), shiftResponse.getShiftDate());
-        assertEquals(LocalTime.parse("08:00"), shiftResponse.getStartTime());
+        assertEquals("08:00 AM", shiftResponse.getStartTime());
     }
 
     @Test
