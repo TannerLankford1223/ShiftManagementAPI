@@ -11,6 +11,7 @@ import com.example.shiftservice.infrastructure.mapper.ShiftMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -36,6 +37,7 @@ public class ShiftService implements ShiftServicePort {
         this.mapper = mapper;
     }
 
+    @Transactional
     @Override
     public ShiftResponse createShift(ShiftRequest shiftRequest) {
         if (isValidShiftRequest(shiftRequest)) {
@@ -101,6 +103,7 @@ public class ShiftService implements ShiftServicePort {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void postWorkSchedule(List<ShiftRequest> shiftRequests) {
         List<Shift> shifts = new ArrayList<>();
@@ -116,6 +119,7 @@ public class ShiftService implements ShiftServicePort {
         shiftRepo.postWorkSchedule(shifts);
     }
 
+    @Transactional
     @Override
     public boolean deleteEmployeeShift(long shiftId) {
         Shift deletedShift = shiftRepo.deleteShift(shiftId);
