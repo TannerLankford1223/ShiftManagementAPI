@@ -35,7 +35,11 @@ public class ShiftController {
     // request body. Otherwise, it returns shifts for all employees.
     @GetMapping("/schedule")
     public List<DailySchedule> getWorkSchedule(@RequestBody ScheduleRequest scheduleRequest) {
-        return shiftService.getWorkSchedule(scheduleRequest);
+        if (scheduleRequest.getEmployeeId() == 0) {
+            return shiftService.getWorkSchedule(scheduleRequest);
+        } else {
+            return shiftService.getWorkSchedule(scheduleRequest);
+        }
     }
 
     // Posts a list of shifts for a given time period

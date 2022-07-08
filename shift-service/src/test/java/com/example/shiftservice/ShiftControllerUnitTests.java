@@ -116,6 +116,33 @@ public class ShiftControllerUnitTests {
     }
 
     @Test
+    public void getEmployeeSchedule_ReturnsAScheduleOfEmployeesShifts() throws Exception {
+        ShiftResponse response1 = new ShiftResponse(406L, 27L, LocalDate.now().plusDays(3),
+                LocalTime.parse("08:30"), LocalTime.parse("14:00"));
+        ShiftResponse response2 = new ShiftResponse(407L, 35L, LocalDate.now().plusDays(3),
+                LocalTime.parse("08:30"), LocalTime.parse("14:00"));
+        ShiftResponse response3 = new ShiftResponse(408L, 10L, LocalDate.now().plusDays(3),
+                LocalTime.parse("14:00"), LocalTime.parse("17:00"));
+
+        ScheduleRequest scheduleRequest =
+                new ScheduleRequest(10L, response.getShiftDate(),
+                        response1.getShiftDate().plusDays(1));
+
+        DailySchedule scheduleDay = new DailySchedule(response1.getShiftDate(),
+                List.of(response3));
+
+        Mockito.when(shiftService.getWorkSchedule(scheduleRequest)).thenReturn(List.of(scheduleDay));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/schedule")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(scheduleRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andDo(print());
+    }
+
+    @Test
     public void postWorkSchedule_ReturnsResponseEntity() throws Exception {
         ShiftRequest request1 = new ShiftRequest(27L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
