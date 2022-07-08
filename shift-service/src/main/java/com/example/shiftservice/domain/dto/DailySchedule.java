@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +18,5 @@ public class DailySchedule {
     private LocalDate date;
 
     @JsonProperty("daily_shifts")
-    private Set<ShiftResponse> dailyShifts;
+    private List<ShiftResponse> dailyShifts = new ArrayList<>();
 }
