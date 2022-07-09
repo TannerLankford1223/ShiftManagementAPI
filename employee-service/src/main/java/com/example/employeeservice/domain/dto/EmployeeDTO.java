@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +26,9 @@ public class EmployeeDTO {
     @NotNull
     @Email(message = "Email must be valid")
     private String email;
+
+    @JsonProperty("employee_phone")
+    @NotNull
+    @Size(min = 10, max = 10, message = "Phone number must be valid")
+    private String phoneNumber;
 }
