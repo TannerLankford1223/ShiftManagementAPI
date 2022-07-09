@@ -6,6 +6,8 @@ import com.example.employeeservice.domain.ports.spi.EmployeePersistencePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class EmployeeService implements EmployeeServicePort {
@@ -23,6 +25,11 @@ public class EmployeeService implements EmployeeServicePort {
 
     @Override
     public EmployeeDTO getEmployee(long employeeId) {
+        return null;
+    }
+
+    @Override
+    public List<EmployeeDTO> getEmployees() {
         return null;
     }
 
