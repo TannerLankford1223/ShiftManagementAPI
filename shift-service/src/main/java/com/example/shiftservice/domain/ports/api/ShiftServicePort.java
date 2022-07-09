@@ -2,24 +2,23 @@ package com.example.shiftservice.domain.ports.api;
 
 import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
-import com.example.shiftservice.domain.dto.ShiftRequest;
-import com.example.shiftservice.domain.dto.ShiftResponse;
+import com.example.shiftservice.domain.dto.ShiftDTO;
 
 import java.util.List;
 
 public interface ShiftServicePort {
 
-    ShiftResponse createShift(ShiftRequest shiftRequest);
+    ShiftDTO createShift(ShiftDTO shiftDTO);
 
-    ShiftResponse getEmployeeShift(long shiftId);
+    ShiftDTO getEmployeeShift(long shiftId);
 
     List<DailySchedule> getWorkSchedule(ScheduleRequest scheduleRequest);
 
     List<DailySchedule> getEmployeeSchedule(ScheduleRequest scheduleRequest);
 
-    void postWorkSchedule(List<ShiftRequest> shiftRequests);
+    void postWorkSchedule(List<ShiftDTO> shiftDTOS);
 
     boolean deleteEmployeeShift(long shiftId);
 
-    boolean isValidShiftRequest(ShiftRequest shiftRequest);
+    boolean isValidShiftRequest(ShiftDTO shiftDTO);
 }

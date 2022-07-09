@@ -3,8 +3,7 @@ package com.example.shiftservice;
 import com.example.shiftservice.application.controller.ShiftController;
 import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
-import com.example.shiftservice.domain.dto.ShiftRequest;
-import com.example.shiftservice.domain.dto.ShiftResponse;
+import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
 import com.example.shiftservice.infrastructure.entity.Shift;
 import com.example.shiftservice.infrastructure.mapper.ShiftMapper;
@@ -44,34 +43,34 @@ public class ShiftControllerUnitTests {
 
     private ShiftMapper shiftMapper;
 
-    private ShiftRequest request;
+    private ShiftDTO request;
     private Shift shift;
-    private ShiftResponse response;
+    private ShiftDTO response;
 
     @BeforeEach
     public void init() {
         this.shiftMapper = new ShiftMapperImpl();
-        this.request = new ShiftRequest(25L, LocalDate.now().plusDays(2),
+        this.request = new ShiftDTO(25L, LocalDate.now().plusDays(2),
                 LocalTime.parse("09:30"), LocalTime.parse("12:45"));
-        this.shift = shiftMapper.shiftRequestToShift(request);
+        this.shift = shiftMapper.shiftDTOToShift(request);
         this.shift.setId(405L);
-        this.response = shiftMapper.shiftToShiftResponse(this.shift);
+        this.response = shiftMapper.shiftToShiftDTO(this.shift);
     }
 
     @Test
     public void createShift_ReturnsShiftResponse() throws Exception {
         Mockito.when(shiftService.createShift(request)).thenReturn(response);
 
-       this.mockMvc.perform(MockMvcRequestBuilders.post("/api/shift/new-shift")
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/shift/new-shift")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-               .andExpect(jsonPath("$.shift_id").value(shift.getId()))
-               .andExpect(jsonPath("$.employee_id").value(shift.getEmployeeId()))
-               .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate().toString()))
-               .andExpect(jsonPath("$.start_time").value("09:30 AM"))
-               .andExpect(jsonPath("$.end_time").value("12:45 PM"));
+                .andExpect(jsonPath("$.shift_id").value(shift.getId()))
+                .andExpect(jsonPath("$.employee_id").value(shift.getEmployeeId()))
+                .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate().toString()))
+                .andExpect(jsonPath("$.start_time").value("09:30:00"))
+                .andExpect(jsonPath("$.end_time").value("12:45:00"));
     }
 
     @Test
@@ -84,17 +83,17 @@ public class ShiftControllerUnitTests {
                 .andExpect(jsonPath("$.shift_id").value(shift.getId()))
                 .andExpect(jsonPath("$.employee_id").value(shift.getEmployeeId()))
                 .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate().toString()))
-                .andExpect(jsonPath("$.start_time").value("09:30 AM"))
-                .andExpect(jsonPath("$.end_time").value("12:45 PM"));
+                .andExpect(jsonPath("$.start_time").value("09:30:00"))
+                .andExpect(jsonPath("$.end_time").value("12:45:00"));
     }
 
     @Test
     public void getWorkSchedule_ReturnsListOfDailySchedules() throws Exception {
-        ShiftResponse response1 = new ShiftResponse(406L, 27L, LocalDate.now().plusDays(3),
+        ShiftDTO response1 = new ShiftDTO(406L, 27L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftResponse response2 = new ShiftResponse(407L, 35L, LocalDate.now().plusDays(3),
+        ShiftDTO response2 = new ShiftDTO(407L, 35L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftResponse response3 = new ShiftResponse(408L, 10L, LocalDate.now().plusDays(3),
+        ShiftDTO response3 = new ShiftDTO(408L, 10L, LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
 
         ScheduleRequest scheduleRequest =
@@ -117,11 +116,11 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void getEmployeeSchedule_ReturnsAScheduleOfEmployeesShifts() throws Exception {
-        ShiftResponse response1 = new ShiftResponse(406L, 27L, LocalDate.now().plusDays(3),
+        ShiftDTO response1 = new ShiftDTO(406L, 27L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftResponse response2 = new ShiftResponse(407L, 35L, LocalDate.now().plusDays(3),
+        ShiftDTO response2 = new ShiftDTO(407L, 35L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftResponse response3 = new ShiftResponse(408L, 10L, LocalDate.now().plusDays(3),
+        ShiftDTO response3 = new ShiftDTO(408L, 10L, LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
 
         ScheduleRequest scheduleRequest =
@@ -144,14 +143,14 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void postWorkSchedule_ReturnsResponseEntity() throws Exception {
-        ShiftRequest request1 = new ShiftRequest(27L, LocalDate.now().plusDays(3),
+        ShiftDTO request1 = new ShiftDTO(27L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftRequest request2 = new ShiftRequest(35L, LocalDate.now().plusDays(3),
+        ShiftDTO request2 = new ShiftDTO(35L, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftRequest request3 = new ShiftRequest(10L, LocalDate.now().plusDays(3),
+        ShiftDTO request3 = new ShiftDTO(10L, LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
 
-        List<ShiftRequest> schedule = List.of(request1, request2, request3);
+        List<ShiftDTO> schedule = List.of(request1, request2, request3);
 
         Mockito.doNothing().when(shiftService).postWorkSchedule(schedule);
 

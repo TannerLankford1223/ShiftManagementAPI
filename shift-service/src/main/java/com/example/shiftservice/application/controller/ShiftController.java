@@ -2,8 +2,7 @@ package com.example.shiftservice.application.controller;
 
 import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
-import com.example.shiftservice.domain.dto.ShiftRequest;
-import com.example.shiftservice.domain.dto.ShiftResponse;
+import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,12 @@ public class ShiftController {
     }
 
     @PostMapping("/new-shift")
-    public ShiftResponse createShift(@RequestBody ShiftRequest shift) {
+    public ShiftDTO createShift(@RequestBody ShiftDTO shift) {
         return shiftService.createShift(shift);
     }
 
     @GetMapping("/{shiftId}")
-    public ShiftResponse getEmployeeShift(@PathVariable long shiftId) {
+    public ShiftDTO getEmployeeShift(@PathVariable long shiftId) {
         return shiftService.getEmployeeShift(shiftId);
     }
 
@@ -44,8 +43,8 @@ public class ShiftController {
 
     // Posts a list of shifts for a given time period
     @PostMapping("/schedule")
-    public ResponseEntity<String> postWorkSchedule(@RequestBody List<ShiftRequest> shiftRequests) {
-        shiftService.postWorkSchedule(shiftRequests);
+    public ResponseEntity<String> postWorkSchedule(@RequestBody List<ShiftDTO> shiftDTOS) {
+        shiftService.postWorkSchedule(shiftDTOS);
         return new ResponseEntity<>("Work schedule successfully posted", HttpStatus.OK);
     }
 

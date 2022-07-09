@@ -18,5 +18,5 @@ public class DailySchedule {
     private LocalDate date;
 
     @JsonProperty("daily_shifts")
-    private List<ShiftResponse> dailyShifts = new ArrayList<>();
+    private List<ShiftDTO> dailyShifts = new ArrayList<>();
 }

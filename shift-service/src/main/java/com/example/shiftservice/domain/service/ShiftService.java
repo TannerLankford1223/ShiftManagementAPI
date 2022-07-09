@@ -39,23 +39,23 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
-    public ShiftResponse createShift(ShiftRequest shiftRequest) {
-        if (isValidShiftRequest(shiftRequest)) {
-            Shift shift = mapper.shiftRequestToShift(shiftRequest);
-            return mapper.shiftToShiftResponse(shiftRepo.createShift(shift));
+    public ShiftDTO createShift(ShiftDTO shiftDTO) {
+        if (isValidShiftRequest(shiftDTO)) {
+            Shift shift = mapper.shiftDTOToShift(shiftDTO);
+            return mapper.shiftToShiftDTO(shiftRepo.createShift(shift));
         } else {
             throw new InvalidRequestException("Invalid shift request");
         }
     }
 
     @Override
-    public ShiftResponse getEmployeeShift(long shiftId) {
+    public ShiftDTO getEmployeeShift(long shiftId) {
         Optional<Shift> shiftOpt = shiftRepo.getShift(shiftId);
 
         if (shiftOpt.isPresent()) {
-            return mapper.shiftToShiftResponse(shiftOpt.get());
+            return mapper.shiftToShiftDTO(shiftOpt.get());
         }
-        log.warn("Unable to find shift with id " + shiftId);
+        log.error("Unable to find shift with id " + shiftId);
         throw new ShiftNotFoundException(shiftId);
     }
 
@@ -73,7 +73,7 @@ public class ShiftService implements ShiftServicePort {
     @Override
     public List<DailySchedule> getEmployeeSchedule(ScheduleRequest scheduleRequest) {
         if (!employeeClient.employeeExists(scheduleRequest.getEmployeeId())) {
-            log.warn("Employee with id " + scheduleRequest.getEmployeeId() + " does not exist");
+            log.error("Employee with id " + scheduleRequest.getEmployeeId() + " does not exist");
             throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() +  " does not exist");
         } else if (scheduleRequest.getEndDate().isBefore(scheduleRequest.getStartDate())) {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
@@ -92,9 +92,9 @@ public class ShiftService implements ShiftServicePort {
         return groupedShifts.entrySet()
                 .stream()
                 .map(e -> {
-                    List<ShiftResponse> shiftResponses = new ArrayList<>(e.getValue()
+                    List<ShiftDTO> shiftResponses = new ArrayList<>(e.getValue()
                             .stream()
-                            .map(mapper::shiftToShiftResponse)
+                            .map(mapper::shiftToShiftDTO)
                             .toList());
 
                     return new DailySchedule(e.getKey(), shiftResponses);
@@ -105,12 +105,12 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
-    public void postWorkSchedule(List<ShiftRequest> shiftRequests) {
+    public void postWorkSchedule(List<ShiftDTO> shiftDTOS) {
         List<Shift> shifts = new ArrayList<>();
 
-        for (ShiftRequest request : shiftRequests) {
+        for (ShiftDTO request : shiftDTOS) {
             if (isValidShiftRequest(request)) {
-                shifts.add(mapper.shiftRequestToShift(request));
+                shifts.add(mapper.shiftDTOToShift(request));
             } else {
                 throw new InvalidRequestException("Shift request invalid");
             }
@@ -128,16 +128,16 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
-    public boolean isValidShiftRequest(ShiftRequest shiftRequest) {
-        if (!employeeClient.employeeExists(shiftRequest.getEmployeeId())) {
-            log.warn("Employee with id " + shiftRequest.getEmployeeId() + " not found");
+    public boolean isValidShiftRequest(ShiftDTO shiftDTO) {
+        if (!employeeClient.employeeExists(shiftDTO.getEmployeeId())) {
+            log.error("Employee with id " + shiftDTO.getEmployeeId() + " not found");
             return false;
-        } else if (shiftRequest.getShiftDate().isBefore(LocalDate.now())) {
-            log.warn("Invalid date: date must be on or after " + LocalDate.now());
+        } else if (shiftDTO.getShiftDate().isBefore(LocalDate.now())) {
+            log.error("Invalid date: date must be on or after " + LocalDate.now());
             return false;
-        } else if (shiftRequest.getStartTime().isBefore(LocalTime.parse(START_TIME))
-                || shiftRequest.getEndTime().isAfter(LocalTime.parse(END_TIME))) {
-            log.warn("Employee shift times need to start on or after "
+        } else if (shiftDTO.getStartTime().isBefore(LocalTime.parse(START_TIME))
+                || shiftDTO.getEndTime().isAfter(LocalTime.parse(END_TIME))) {
+            log.error("Employee shift times need to start on or after "
                     + LocalTime.parse(START_TIME) + " (8:00AM) and end on or before " + LocalTime.parse(END_TIME)
                     + " (5:00PM)");
             return false;
