@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-    Employee employeeRequestToEmployee(EmployeeDTO employeeDTO);
+    Employee employeeDTOToEmployee(EmployeeDTO employeeDTO);
 
     EmployeeDTO employeeToEmployeeDTO(Employee employee);
 }
