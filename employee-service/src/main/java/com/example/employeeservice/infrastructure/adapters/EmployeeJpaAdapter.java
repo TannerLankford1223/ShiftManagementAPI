@@ -5,6 +5,8 @@ import com.example.employeeservice.infrastructure.entity.Employee;
 import com.example.employeeservice.infrastructure.persistence.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeJpaAdapter implements EmployeePersistencePort {
 
@@ -21,6 +23,11 @@ public class EmployeeJpaAdapter implements EmployeePersistencePort {
 
     @Override
     public Employee getEmployee(long employeeId) {
+        return null;
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
         return null;
     }
 

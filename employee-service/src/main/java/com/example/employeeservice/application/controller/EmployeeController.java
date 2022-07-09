@@ -4,6 +4,8 @@ import com.example.employeeservice.domain.dto.EmployeeDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/employee")
 public class EmployeeController {
@@ -15,6 +17,11 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
+        return null;
+    }
+
+    @GetMapping("/")
+    public List<EmployeeDTO> getEmployees() {
         return null;
     }
 
