@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EmployeeServicePort {
 
-    EmployeeDTO saveEmployee(EmployeeDTO employee);
+    EmployeeDTO registerEmployee(EmployeeDTO employee);
 
     EmployeeDTO getEmployee(long employeeId);
 
