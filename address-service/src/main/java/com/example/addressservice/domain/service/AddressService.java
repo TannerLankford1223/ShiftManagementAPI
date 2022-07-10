@@ -9,6 +9,7 @@ import com.example.addressservice.infrastructure.mapper.AddressMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class AddressService implements AddressServicePort {
         this.mapper = mapper;
     }
 
+    @Transactional
     @Override
     public AddressDTO saveAddress(AddressDTO addressDTO) {
         Address address = mapper.addressDTOToAddress(addressDTO);
@@ -61,6 +63,7 @@ public class AddressService implements AddressServicePort {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public AddressDTO updateAddress(AddressDTO addressDTO) {
         Optional<Address> addressOpt = addressRepo.getAddress(addressDTO.getStoreId());
@@ -79,6 +82,7 @@ public class AddressService implements AddressServicePort {
         throw new InvalidRequestException("Store with id " + addressDTO.getStoreId() + " not found");
     }
 
+    @Transactional
     @Override
     public void deleteAddress(String storeId) {
         Address deletedAddress = addressRepo.deleteAddress(storeId);
@@ -87,5 +91,7 @@ public class AddressService implements AddressServicePort {
             log.error("Store with id " + storeId + " not found");
             throw new InvalidRequestException("Store with id " + storeId + " not found");
         }
+
+        log.info("Store with id " + storeId + " deleted");
     }
 }
