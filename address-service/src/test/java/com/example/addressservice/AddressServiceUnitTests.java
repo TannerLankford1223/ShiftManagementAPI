@@ -34,7 +34,6 @@ public class AddressServiceUnitTests {
 
     private AddressDTO request;
     private Address address;
-    private AddressDTO response;
 
     @BeforeEach
     public void init() {
@@ -43,7 +42,6 @@ public class AddressServiceUnitTests {
         this.request = new AddressDTO("Store1001","123 Main Street", "City",
                 "State", 12345);
         this.address = mapper.addressDTOToAddress(request);
-        this.response = mapper.addressToAddressDTO(address);
     }
 
 
@@ -134,7 +132,7 @@ public class AddressServiceUnitTests {
     @Test
     public void updateAddress_AddressNonExistent_ThrowsInvalidRequestException() {
         Mockito.when(addressRepo.getAddress(address.getStoreId())).thenReturn(Optional.empty());
-        assertThrows(InvalidRequestException.class, () -> addressService.updateAddress(response));
+        assertThrows(InvalidRequestException.class, () -> addressService.updateAddress(request));
     }
 
     @Test
