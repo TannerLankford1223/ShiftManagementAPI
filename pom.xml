@@ -23,6 +23,7 @@
         <module>shift-service</module>
         <module>employee-service</module>
         <module>email-service</module>
+        <module>address-service</module>
     </modules>
     <dependencies>
         <dependency>
