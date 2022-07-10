@@ -30,15 +30,15 @@ public class AddressDTO {
     @NotNull
     private String state;
 
-    @JsonProperty("country")
+    @JsonProperty("zip_code")
     @NotNull
     @Size(min = 5, max = 5, message = "Zip Code must be 5 digits in length")
-    private int zip;
+    private int zipCode;
 
-    public AddressDTO(String address, String city, String state, int zip) {
+    public AddressDTO(String address, String city, String state, int zipCode) {
         this.address = address;
         this.city = city;
         this.state = state;
-        this.zip = zip;
+        this.zipCode = zipCode;
     }
 }
