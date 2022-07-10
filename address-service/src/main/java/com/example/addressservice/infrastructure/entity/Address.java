@@ -22,5 +22,5 @@ public class Address {
 
     private String state;
 
-    private int zip;
+    private int zipCode;
 }
