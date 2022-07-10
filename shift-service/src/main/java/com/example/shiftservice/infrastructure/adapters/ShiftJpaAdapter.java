@@ -25,7 +25,7 @@ public class ShiftJpaAdapter implements ShiftPersistencePort {
 
     @Override
     public Optional<Shift> getShift(long shiftId) {
-        return shiftRepo.getShiftById(shiftId);
+        return shiftRepo.findById(shiftId);
     }
 
     @Override
