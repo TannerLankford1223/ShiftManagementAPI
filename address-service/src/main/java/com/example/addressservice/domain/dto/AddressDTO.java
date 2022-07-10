@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -31,6 +32,7 @@ public class AddressDTO {
 
     @JsonProperty("country")
     @NotNull
+    @Size(min = 5, max = 5, message = "Zip Code must be 5 digits in length")
     private int zip;
 
     public AddressDTO(String address, String city, String state, int zip) {
