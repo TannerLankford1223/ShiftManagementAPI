@@ -67,7 +67,7 @@ public class EmployeeService implements EmployeeServicePort {
             employee.setEmail(employeeDTO.getEmail());
             employee.setPhoneNumber(employeeDTO.getPhoneNumber());
 
-           return mapper.employeeToEmployeeDTO(employeeRepo.saveEmployee(employee));
+            return mapper.employeeToEmployeeDTO(employeeRepo.saveEmployee(employee));
         }
 
         log.error("Employee with id " + employeeDTO.getId() + " not found");
@@ -77,9 +77,10 @@ public class EmployeeService implements EmployeeServicePort {
     @Transactional
     @Override
     public void deleteEmployee(long employeeId) {
-        Employee employee = employeeRepo.deleteEmployee(employeeId);
-
-        if (employee == null) {
+        if (employeeExists(employeeId)) {
+            employeeRepo.deleteEmployee(employeeId);
+        } else {
+            log.error("Employee with id " + employeeId + " not found");
             throw new InvalidRequestException("Employee with id " + employeeId + " not found");
         }
     }

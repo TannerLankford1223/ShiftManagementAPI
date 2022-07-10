@@ -13,7 +13,7 @@ public interface EmployeePersistencePort {
 
     List<Employee> getEmployees();
 
-    Employee deleteEmployee(long employeeId);
+    void deleteEmployee(long employeeId);
 
     boolean employeeExists(long employeeId);
 }

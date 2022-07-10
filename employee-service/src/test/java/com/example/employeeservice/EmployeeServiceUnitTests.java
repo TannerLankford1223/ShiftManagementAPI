@@ -122,7 +122,8 @@ public class EmployeeServiceUnitTests {
 
     @Test
     public void deleteEmployee_EmployeeExists_ReturnsStatus200() {
-        Mockito.when(employeeRepo.deleteEmployee(employee.getId())).thenReturn(employee);
+        Mockito.doNothing().when(employeeRepo).deleteEmployee(employee.getId());
+        Mockito.when(employeeRepo.employeeExists(employee.getId())).thenReturn(true);
 
         employeeService.deleteEmployee(employee.getId());
 

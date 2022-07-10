@@ -19,22 +19,22 @@ public class EmployeeJpaAdapter implements EmployeePersistencePort {
 
     @Override
     public Employee saveEmployee(Employee employee) {
-        return null;
+        return employeeRepo.save(employee);
     }
 
     @Override
     public Optional<Employee> getEmployee(long employeeId) {
-        return null;
+        return employeeRepo.findById(employeeId);
     }
 
     @Override
     public List<Employee> getEmployees() {
-        return null;
+        return employeeRepo.findAll();
     }
 
     @Override
-    public Employee deleteEmployee(long employeeId) {
-        return null;
+    public void deleteEmployee(long employeeId) {
+        employeeRepo.deleteById(employeeId);
     }
 
     @Override
