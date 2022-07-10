@@ -50,7 +50,7 @@ public class ShiftControllerUnitTests {
     @BeforeEach
     public void init() {
         this.shiftMapper = new ShiftMapperImpl();
-        this.request = new ShiftDTO(25L, LocalDate.now().plusDays(2),
+        this.request = new ShiftDTO(25L, "Store1001", LocalDate.now().plusDays(2),
                 LocalTime.parse("09:30"), LocalTime.parse("12:45"));
         this.shift = shiftMapper.shiftDTOToShift(request);
         this.shift.setId(405L);
@@ -89,11 +89,14 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void getWorkSchedule_ReturnsListOfDailySchedules() throws Exception {
-        ShiftDTO response1 = new ShiftDTO(406L, 27L, LocalDate.now().plusDays(3),
+        ShiftDTO response1 =
+                new ShiftDTO(406L, 27L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO response2 = new ShiftDTO(407L, 35L, LocalDate.now().plusDays(3),
+        ShiftDTO response2 =
+                new ShiftDTO(407L, 35L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO response3 = new ShiftDTO(408L, 10L, LocalDate.now().plusDays(3),
+        ShiftDTO response3 =
+                new ShiftDTO(408L, 10L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
 
         ScheduleRequest scheduleRequest =
@@ -116,11 +119,14 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void getEmployeeSchedule_ReturnsAScheduleOfEmployeesShifts() throws Exception {
-        ShiftDTO response1 = new ShiftDTO(406L, 27L, LocalDate.now().plusDays(3),
+        ShiftDTO response1 =
+                new ShiftDTO(406L, 27L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO response2 = new ShiftDTO(407L, 35L, LocalDate.now().plusDays(3),
+        ShiftDTO response2 =
+                new ShiftDTO(407L, 35L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO response3 = new ShiftDTO(408L, 10L, LocalDate.now().plusDays(3),
+        ShiftDTO response3 =
+                new ShiftDTO(408L, 10L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
 
         ScheduleRequest scheduleRequest =
@@ -143,11 +149,11 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void postWorkSchedule_ReturnsResponseEntity() throws Exception {
-        ShiftDTO request1 = new ShiftDTO(27L, LocalDate.now().plusDays(3),
+        ShiftDTO request1 = new ShiftDTO(27L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO request2 = new ShiftDTO(35L, LocalDate.now().plusDays(3),
-                LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO request3 = new ShiftDTO(10L, LocalDate.now().plusDays(3),
+        ShiftDTO request2 = new ShiftDTO(35L, "Store1001", LocalDate.now().plusDays(3),
+                LocalTime.parse("08:30"),  LocalTime.parse("14:00"));
+        ShiftDTO request3 = new ShiftDTO(10L, "Store1001", LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
 
         List<ShiftDTO> schedule = List.of(request1, request2, request3);

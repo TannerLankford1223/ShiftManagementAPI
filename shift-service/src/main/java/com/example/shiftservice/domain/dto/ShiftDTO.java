@@ -26,6 +26,10 @@ public class ShiftDTO {
     @NotNull
     private long employeeId;
 
+    @JsonProperty("store_id")
+    @NotNull
+    private String storeId;
+
     @JsonProperty("shift_date")
     @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}")
     private LocalDate shiftDate;
@@ -38,8 +42,9 @@ public class ShiftDTO {
     @NotNull
     private LocalTime endTime;
 
-    public ShiftDTO(long employeeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
+    public ShiftDTO(long employeeId, String storeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
         this.employeeId = employeeId;
+        this.storeId = storeId;
         this.shiftDate = shiftDate;
         this.startTime = startTime;
         this.endTime = endTime;

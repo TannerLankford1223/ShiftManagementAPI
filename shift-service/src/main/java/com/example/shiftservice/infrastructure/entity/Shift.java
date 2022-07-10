@@ -22,6 +22,8 @@ public class Shift {
 
     private long employeeId;
 
+    private String storeId;
+
     @Temporal(TemporalType.DATE)
     private LocalDate shiftDate;
 
@@ -31,8 +33,9 @@ public class Shift {
     @Temporal(TemporalType.TIME)
     private LocalTime endTime;
 
-    public Shift(long employeeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
+    public Shift(long employeeId, String storeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
         this.employeeId = employeeId;
+        this.storeId = storeId;
         this.shiftDate = shiftDate;
         this.startTime = startTime;
         this.endTime = endTime;

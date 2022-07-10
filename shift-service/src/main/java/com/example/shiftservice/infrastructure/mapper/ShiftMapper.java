@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public abstract class ShiftMapper {
     public ShiftDTO shiftToShiftDTO(Shift shift) {
-        return new ShiftDTO(shift.getId(), shift.getEmployeeId(), shift.getShiftDate(),
+        return new ShiftDTO(shift.getId(), shift.getEmployeeId(), shift.getStoreId(), shift.getShiftDate(),
                 shift.getStartTime(), shift.getEndTime());
     }
 
@@ -16,6 +16,7 @@ public abstract class ShiftMapper {
     public Shift shiftDTOToShift(ShiftDTO request) {
         return Shift.builder()
                 .employeeId(request.getEmployeeId())
+                .storeId(request.getStoreId())
                 .shiftDate(request.getShiftDate())
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
