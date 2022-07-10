@@ -3,12 +3,12 @@ package com.example.addressservice.infrastructure.adapters;
 import com.example.addressservice.domain.ports.spi.AddressPersistencePort;
 import com.example.addressservice.infrastructure.entity.Address;
 import com.example.addressservice.infrastructure.persistence.AddressRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Service
 public class AddressJpaAdapter implements AddressPersistencePort {
 
     private final AddressRepository addressRepo;
