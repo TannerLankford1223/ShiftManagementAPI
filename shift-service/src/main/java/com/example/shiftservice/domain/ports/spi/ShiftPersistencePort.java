@@ -12,9 +12,9 @@ public interface ShiftPersistencePort {
 
     Optional<Shift> getShift(long shiftId);
 
-    List<Shift> getWorkSchedule(LocalDate startDate, LocalDate endDate);
+    List<Shift> getWorkSchedule(String storeId, LocalDate startDate, LocalDate endDate);
 
-    List<Shift> getEmployeeSchedule(long employeeId, LocalDate startDate, LocalDate endDate);
+    List<Shift> getEmployeeSchedule(String storeId, long employeeId, LocalDate startDate, LocalDate endDate);
 
     void postWorkSchedule(List<Shift> shift);
 

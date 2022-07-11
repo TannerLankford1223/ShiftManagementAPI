@@ -29,13 +29,13 @@ public class ShiftJpaAdapter implements ShiftPersistencePort {
     }
 
     @Override
-    public List<Shift> getWorkSchedule(LocalDate startDate, LocalDate endDate) {
-        return shiftRepo.findAllByShiftDateBetween(startDate, endDate);
+    public List<Shift> getWorkSchedule(String storeId, LocalDate startDate, LocalDate endDate) {
+        return shiftRepo.findAllByStoreIdAndShiftDateBetween(storeId, startDate, endDate);
     }
 
     @Override
-    public List<Shift> getEmployeeSchedule(long employeeId, LocalDate startDate, LocalDate endDate) {
-        return shiftRepo.findAllByEmployeeIdAndShiftDateBetween(employeeId, startDate, endDate);
+    public List<Shift> getEmployeeSchedule(String storeId, long employeeId, LocalDate startDate, LocalDate endDate) {
+        return shiftRepo.findAllByStoreIdAndEmployeeIdAndShiftDateBetween(storeId, employeeId, startDate, endDate);
     }
 
     @Override

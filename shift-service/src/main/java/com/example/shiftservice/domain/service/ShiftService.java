@@ -65,7 +65,8 @@ public class ShiftService implements ShiftServicePort {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
         }
 
-        List<Shift> shifts = shiftRepo.getWorkSchedule(scheduleRequest.getStartDate(), scheduleRequest.getEndDate());
+        List<Shift> shifts = shiftRepo.getWorkSchedule(scheduleRequest.getStoreId(), scheduleRequest.getStartDate(),
+                scheduleRequest.getEndDate());
 
         return toDailyScheduleList(shifts);
     }
@@ -79,7 +80,7 @@ public class ShiftService implements ShiftServicePort {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
         }
 
-        List<Shift> shifts = shiftRepo.getEmployeeSchedule(scheduleRequest.getEmployeeId(),
+        List<Shift> shifts = shiftRepo.getEmployeeSchedule(scheduleRequest.getStoreId(),scheduleRequest.getEmployeeId(),
                 scheduleRequest.getStartDate(), scheduleRequest.getEndDate());
 
         return toDailyScheduleList(shifts);
