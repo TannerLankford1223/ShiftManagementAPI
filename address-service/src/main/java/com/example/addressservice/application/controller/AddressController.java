@@ -50,7 +50,7 @@ public class AddressController {
         return new ResponseEntity<>("Store with id " + storeId + " deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/exists/{storeId}")
+    @GetMapping("/{storeId}/check")
     public boolean addressExists(@PathVariable String storeId) {
         return addressService.addressExists(storeId);
     }
