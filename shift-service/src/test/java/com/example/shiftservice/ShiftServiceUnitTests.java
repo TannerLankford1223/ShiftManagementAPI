@@ -1,7 +1,7 @@
 package com.example.shiftservice;
 
+import com.example.shiftservice.domain.client.AddressClient;
 import com.example.shiftservice.domain.client.EmployeeClient;
-import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
 import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
@@ -37,6 +37,8 @@ public class ShiftServiceUnitTests {
 
     @Mock
     private EmployeeClient employeeClient;
+    @Mock
+    private AddressClient addressClient;
 
     private ShiftServicePort shiftService;
     private Shift shift;
@@ -47,7 +49,7 @@ public class ShiftServiceUnitTests {
     @BeforeEach
     public void init() {
         this.mapper = new ShiftMapperImpl();
-        this.shiftService = new ShiftService(shiftRepo, employeeClient, mapper);
+        this.shiftService = new ShiftService(shiftRepo, employeeClient, addressClient, mapper);
         this.shiftDTO = new ShiftDTO(16L, storeId, LocalDate.now().plusDays(1),
                 LocalTime.parse("08:00"), LocalTime.parse("15:30"));
         this.shift = mapper.shiftDTOToShift(shiftDTO);
@@ -140,25 +142,20 @@ public class ShiftServiceUnitTests {
         Shift shift2 = new Shift(407L, 135L, storeId, LocalDate.now().plusDays(2),
                 LocalTime.parse("08:00"), LocalTime.parse("15:30"));
 
-        ShiftDTO shiftResponse1 = mapper.shiftToShiftDTO(shift1);
-        ShiftDTO shiftResponse2 = mapper.shiftToShiftDTO(shift2);
+        LocalDate start = LocalDate.now().plusDays(1);
+        LocalDate end = LocalDate.now().plusDays(2);
 
-        DailySchedule day1 = new DailySchedule(LocalDate.now().plusDays(1),
-                List.of(shiftResponse, shiftResponse1));
-        DailySchedule day2 = new DailySchedule(LocalDate.now().plusDays(2),
-                List.of(shiftResponse2));
+        ScheduleRequest scheduleRequest = new ScheduleRequest(storeId, start, end);
 
-        ScheduleRequest scheduleRequest = new ScheduleRequest(storeId, day1.getDate(), day2.getDate());
-
-        Mockito.when(shiftRepo.getWorkSchedule(storeId, day1.getDate(), day2.getDate()))
+        Mockito.when(shiftRepo.getWorkSchedule(storeId, start, end))
                 .thenReturn(List.of(shift, shift1, shift2));
 
-        List<DailySchedule> schedule = shiftService.getWorkSchedule(scheduleRequest);
+        List<ShiftDTO> schedule = shiftService.getWorkSchedule(scheduleRequest);
 
-        assertEquals(LocalDate.now().plusDays(1), schedule.get(0).getDate());
-        assertEquals(2, schedule.get(0).getDailyShifts().size());
-        assertEquals(LocalDate.now().plusDays(2), schedule.get(1).getDate());
-        assertEquals(1, schedule.get(1).getDailyShifts().size());
+        assertEquals(3, schedule.size());
+        assertEquals(0L, schedule.get(0).getShiftId());
+        assertEquals(406L, schedule.get(1).getShiftId());
+        assertEquals(407L, schedule.get(2).getShiftId());
     }
 
     @Test
@@ -180,16 +177,17 @@ public class ShiftServiceUnitTests {
         ScheduleRequest scheduleRequest = new ScheduleRequest(16L, storeId, shift2.getShiftDate(),
                 shift1.getShiftDate());
 
-        Mockito.when(shiftRepo.getEmployeeSchedule(storeId, 16L,
-                        shift2.getShiftDate(), shift1.getShiftDate())).thenReturn(List.of(shift1, shift2));
-        Mockito.when(employeeClient.employeeExists(shift1.getEmployeeId())).thenReturn(true);
+        Mockito.when(shiftRepo.getEmployeeSchedule(scheduleRequest.getStoreId(), scheduleRequest.getEmployeeId(),
+                        scheduleRequest.getStartDate(), scheduleRequest.getEndDate()))
+                .thenReturn(List.of(shift1, shift2));
+        Mockito.when(employeeClient.employeeExists(scheduleRequest.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(scheduleRequest.getStoreId())).thenReturn(true);
 
-        List<DailySchedule> employeeSchedule = shiftService.getEmployeeSchedule(scheduleRequest);
+        List<ShiftDTO> employeeSchedule = shiftService.getEmployeeSchedule(scheduleRequest);
 
-        assertEquals(LocalDate.now().plusDays(7), employeeSchedule.get(0).getDate());
-        assertEquals(435L, employeeSchedule.get(0).getDailyShifts().get(0).getShiftId());
-        assertEquals(LocalDate.now().plusDays(14), employeeSchedule.get(1).getDate());
-        assertEquals(417L, employeeSchedule.get(1).getDailyShifts().get(0).getShiftId());
+        assertEquals(2, employeeSchedule.size());
+        assertEquals(417L, employeeSchedule.get(0).getShiftId());
+        assertEquals(435L, employeeSchedule.get(1).getShiftId());
     }
 
     @Test

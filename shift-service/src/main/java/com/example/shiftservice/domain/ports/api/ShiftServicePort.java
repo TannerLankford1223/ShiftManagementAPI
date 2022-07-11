@@ -1,6 +1,5 @@
 package com.example.shiftservice.domain.ports.api;
 
-import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
 import com.example.shiftservice.domain.dto.ShiftDTO;
 
@@ -12,9 +11,9 @@ public interface ShiftServicePort {
 
     ShiftDTO getEmployeeShift(long shiftId);
 
-    List<DailySchedule> getWorkSchedule(ScheduleRequest scheduleRequest);
+    List<ShiftDTO> getWorkSchedule(ScheduleRequest scheduleRequest);
 
-    List<DailySchedule> getEmployeeSchedule(ScheduleRequest scheduleRequest);
+    List<ShiftDTO> getEmployeeSchedule(ScheduleRequest scheduleRequest);
 
     void postWorkSchedule(List<ShiftDTO> shiftDTOS);
 

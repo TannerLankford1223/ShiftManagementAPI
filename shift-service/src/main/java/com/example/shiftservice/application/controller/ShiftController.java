@@ -1,6 +1,5 @@
 package com.example.shiftservice.application.controller;
 
-import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
 import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
@@ -33,7 +32,7 @@ public class ShiftController {
     // Returns list of shifts for an employee for a given time period if the employee ID is specified in the
     // request body. Otherwise, it returns shifts for all employees.
     @GetMapping("/schedule")
-    public List<DailySchedule> getWorkSchedule(@RequestBody ScheduleRequest scheduleRequest) {
+    public List<ShiftDTO> getWorkSchedule(@RequestBody ScheduleRequest scheduleRequest) {
         if (scheduleRequest.getEmployeeId() == 0) {
             return shiftService.getWorkSchedule(scheduleRequest);
         } else {

@@ -2,7 +2,6 @@ package com.example.shiftservice.domain.service;
 
 import com.example.shiftservice.domain.client.AddressClient;
 import com.example.shiftservice.domain.client.EmployeeClient;
-import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
 import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
@@ -17,7 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +67,7 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
-    public List<DailySchedule> getWorkSchedule(ScheduleRequest scheduleRequest) {
+    public List<ShiftDTO> getWorkSchedule(ScheduleRequest scheduleRequest) {
         if (scheduleRequest.getEndDate().isBefore(scheduleRequest.getStartDate())) {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
         }
@@ -74,11 +75,13 @@ public class ShiftService implements ShiftServicePort {
         List<Shift> shifts = shiftRepo.getWorkSchedule(scheduleRequest.getStoreId(), scheduleRequest.getStartDate(),
                 scheduleRequest.getEndDate());
 
-        return toDailyScheduleList(shifts);
+        return shifts.stream()
+                .map(mapper::shiftToShiftDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<DailySchedule> getEmployeeSchedule(ScheduleRequest scheduleRequest) {
+    public List<ShiftDTO> getEmployeeSchedule(ScheduleRequest scheduleRequest) {
         if (!employeeClient.employeeExists(scheduleRequest.getEmployeeId())) {
             log.error("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
             throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
@@ -92,24 +95,8 @@ public class ShiftService implements ShiftServicePort {
         List<Shift> shifts = shiftRepo.getEmployeeSchedule(scheduleRequest.getStoreId(), scheduleRequest.getEmployeeId(),
                 scheduleRequest.getStartDate(), scheduleRequest.getEndDate());
 
-        return toDailyScheduleList(shifts);
-    }
-
-    private List<DailySchedule> toDailyScheduleList(List<Shift> shifts) {
-        Map<LocalDate, List<Shift>> groupedShifts =
-                shifts.stream().collect(Collectors.groupingBy(Shift::getShiftDate));
-
-        return groupedShifts.entrySet()
-                .stream()
-                .map(e -> {
-                    List<ShiftDTO> shiftResponses = new ArrayList<>(e.getValue()
-                            .stream()
-                            .map(mapper::shiftToShiftDTO)
-                            .toList());
-
-                    return new DailySchedule(e.getKey(), shiftResponses);
-                })
-                .sorted(Comparator.comparing(DailySchedule::getDate))
+        return shifts.stream()
+                .map(mapper::shiftToShiftDTO)
                 .collect(Collectors.toList());
     }
 

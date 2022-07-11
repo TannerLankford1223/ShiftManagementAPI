@@ -1,7 +1,6 @@
 package com.example.shiftservice;
 
 import com.example.shiftservice.application.controller.ShiftController;
-import com.example.shiftservice.domain.dto.DailySchedule;
 import com.example.shiftservice.domain.dto.ScheduleRequest;
 import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
@@ -89,7 +88,7 @@ public class ShiftControllerUnitTests {
     }
 
     @Test
-    public void getWorkSchedule_ReturnsListOfDailySchedules() throws Exception {
+    public void getWorkSchedule_ReturnsListOfShifts() throws Exception {
         ShiftDTO response1 =
                 new ShiftDTO(406L, 27L, storeId, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
@@ -103,18 +102,15 @@ public class ShiftControllerUnitTests {
         ScheduleRequest scheduleRequest =
                 new ScheduleRequest(storeId,response.getShiftDate(), response1.getShiftDate().plusDays(1));
 
-        DailySchedule scheduleDay1 = new DailySchedule(response.getShiftDate(), List.of(response));
-        DailySchedule scheduleDay2 = new DailySchedule(response1.getShiftDate(),
-                List.of(response1, response2, response3));
-
-        Mockito.when(shiftService.getWorkSchedule(scheduleRequest)).thenReturn(List.of(scheduleDay1, scheduleDay2));
+        Mockito.when(shiftService.getWorkSchedule(scheduleRequest))
+                .thenReturn(List.of(response, response1, response2, response3));
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/schedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(scheduleRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$.size()").value(4))
                 .andDo(print());
     }
 
@@ -134,10 +130,7 @@ public class ShiftControllerUnitTests {
                 new ScheduleRequest(10L, storeId, response.getShiftDate(),
                         response1.getShiftDate().plusDays(1));
 
-        DailySchedule scheduleDay = new DailySchedule(response1.getShiftDate(),
-                List.of(response3));
-
-        Mockito.when(shiftService.getWorkSchedule(scheduleRequest)).thenReturn(List.of(scheduleDay));
+        Mockito.when(shiftService.getWorkSchedule(scheduleRequest)).thenReturn(List.of(response3));
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/schedule")
                         .contentType(MediaType.APPLICATION_JSON)
