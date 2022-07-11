@@ -17,4 +17,6 @@ public interface AddressServicePort {
     AddressDTO updateAddress(AddressDTO addressDTO);
 
     void deleteAddress(String storeId);
+
+    boolean addressExists(String storeId);
 }

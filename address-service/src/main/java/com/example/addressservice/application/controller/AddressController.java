@@ -49,4 +49,9 @@ public class AddressController {
         addressService.deleteAddress(storeId);
         return new ResponseEntity<>("Store with id " + storeId + " deleted", HttpStatus.OK);
     }
+
+    @GetMapping("/exists/{storeId}")
+    public boolean addressExists(@PathVariable String storeId) {
+        return addressService.addressExists(storeId);
+    }
 }
