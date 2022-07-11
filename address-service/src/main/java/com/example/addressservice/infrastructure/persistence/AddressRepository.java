@@ -11,5 +11,5 @@ public interface AddressRepository extends JpaRepository<Address, String> {
 
     List<Address> findAllByState(String state);
 
-    Address deleteByStoreId(String storeId);
+    void deleteByStoreId(String storeId);
 }

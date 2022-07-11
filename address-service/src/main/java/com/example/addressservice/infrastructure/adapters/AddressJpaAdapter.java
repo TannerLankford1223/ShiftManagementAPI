@@ -38,8 +38,8 @@ public class AddressJpaAdapter implements AddressPersistencePort {
     }
 
     @Override
-    public Address deleteAddress(String storeId) {
-        return addressRepo.deleteByStoreId(storeId);
+    public void deleteAddress(String storeId) {
+        addressRepo.deleteByStoreId(storeId);
     }
 
     @Override

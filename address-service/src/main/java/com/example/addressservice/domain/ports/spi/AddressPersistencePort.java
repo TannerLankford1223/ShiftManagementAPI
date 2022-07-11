@@ -15,7 +15,7 @@ public interface AddressPersistencePort {
 
     List<Address> getAddressesInState(String state);
 
-    Address deleteAddress(String storeId);
+    void deleteAddress(String storeId);
 
     boolean addressExists(String storeId);
 }

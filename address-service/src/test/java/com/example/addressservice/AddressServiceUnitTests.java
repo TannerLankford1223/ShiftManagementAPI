@@ -137,7 +137,8 @@ public class AddressServiceUnitTests {
 
     @Test
     public void deleteAddress_AddressExists_DeletedSuccessfully() {
-        Mockito.when(addressRepo.deleteAddress(address.getStoreId())).thenReturn(address);
+        Mockito.when(addressRepo.addressExists(address.getStoreId())).thenReturn(true);
+        Mockito.doNothing().when(addressRepo).deleteAddress(address.getStoreId());
 
         addressService.deleteAddress(address.getStoreId());
 
@@ -146,7 +147,7 @@ public class AddressServiceUnitTests {
 
     @Test
     public void deleteAddress_AddressNonExistent_ThrowsInvalidRequestException() {
-        Mockito.when(addressRepo.deleteAddress("fakeStore")).thenReturn(null);
+        Mockito.when(addressRepo.addressExists("fakeStore")).thenReturn(false);
 
         assertThrows(InvalidRequestException.class, () -> addressService.deleteAddress("fakeStore"));
     }
