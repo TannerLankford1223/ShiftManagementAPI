@@ -39,6 +39,6 @@ public class EmployeeJpaAdapter implements EmployeePersistencePort {
 
     @Override
     public boolean employeeExists(long employeeId) {
-        return false;
+        return employeeRepo.existsById(employeeId);
     }
 }
