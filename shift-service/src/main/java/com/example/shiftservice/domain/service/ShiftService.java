@@ -75,12 +75,12 @@ public class ShiftService implements ShiftServicePort {
     public List<DailySchedule> getEmployeeSchedule(ScheduleRequest scheduleRequest) {
         if (!employeeClient.employeeExists(scheduleRequest.getEmployeeId())) {
             log.error("Employee with id " + scheduleRequest.getEmployeeId() + " does not exist");
-            throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() +  " does not exist");
+            throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() + " does not exist");
         } else if (scheduleRequest.getEndDate().isBefore(scheduleRequest.getStartDate())) {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
         }
 
-        List<Shift> shifts = shiftRepo.getEmployeeSchedule(scheduleRequest.getStoreId(),scheduleRequest.getEmployeeId(),
+        List<Shift> shifts = shiftRepo.getEmployeeSchedule(scheduleRequest.getStoreId(), scheduleRequest.getEmployeeId(),
                 scheduleRequest.getStartDate(), scheduleRequest.getEndDate());
 
         return toDailyScheduleList(shifts);
@@ -122,10 +122,14 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
-    public boolean deleteEmployeeShift(long shiftId) {
-        Shift deletedShift = shiftRepo.deleteShift(shiftId);
+    public void deleteEmployeeShift(long shiftId) {
 
-        return deletedShift != null;
+        if (shiftRepo.shiftExists(shiftId)) {
+            shiftRepo.deleteShift(shiftId);
+        } else {
+            log.error("Shift with id " + shiftId + " not found");
+            throw new InvalidRequestException("Shift with id " + shiftId + " not found");
+        }
     }
 
     @Override

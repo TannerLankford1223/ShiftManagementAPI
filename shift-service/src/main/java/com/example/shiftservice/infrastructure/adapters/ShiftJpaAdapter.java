@@ -44,7 +44,12 @@ public class ShiftJpaAdapter implements ShiftPersistencePort {
     }
 
     @Override
-    public Shift deleteShift(long shiftId) {
-        return shiftRepo.deleteShiftById(shiftId);
+    public void deleteShift(long shiftId) {
+        shiftRepo.deleteShiftById(shiftId);
+    }
+
+    @Override
+    public boolean shiftExists(long shiftId) {
+        return shiftRepo.existsById(shiftId);
     }
 }

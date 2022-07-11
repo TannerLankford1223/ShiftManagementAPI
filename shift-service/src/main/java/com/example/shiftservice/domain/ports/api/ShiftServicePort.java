@@ -18,7 +18,7 @@ public interface ShiftServicePort {
 
     void postWorkSchedule(List<ShiftDTO> shiftDTOS);
 
-    boolean deleteEmployeeShift(long shiftId);
+    void deleteEmployeeShift(long shiftId);
 
     boolean isValidShiftRequest(ShiftDTO shiftDTO);
 }

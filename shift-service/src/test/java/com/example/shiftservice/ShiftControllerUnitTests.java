@@ -174,7 +174,7 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void deleteEmployeeShift_ReturnsResponseEntity() throws Exception {
-        Mockito.when(shiftService.deleteEmployeeShift(shift.getId())).thenReturn(true);
+        Mockito.doNothing().when(shiftService).deleteEmployeeShift(shift.getId());
 
         MvcResult result =
                 this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/shift/{shiftId}", shift.getId()))

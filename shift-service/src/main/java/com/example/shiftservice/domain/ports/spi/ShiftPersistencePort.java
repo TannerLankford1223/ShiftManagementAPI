@@ -18,5 +18,7 @@ public interface ShiftPersistencePort {
 
     void postWorkSchedule(List<Shift> shift);
 
-    Shift deleteShift(long shiftId);
+    void deleteShift(long shiftId);
+
+    boolean shiftExists(long shiftId);
 }

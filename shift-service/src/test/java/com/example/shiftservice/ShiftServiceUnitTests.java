@@ -218,7 +218,7 @@ public class ShiftServiceUnitTests {
     }
 
     @Test
-    public void postWorkSchedule_TimeNotValid_ThrowsInvalidShiftRequestException() {
+    public void postWorkSchedule_TimeNotValid_ThrowsInvalidRequestException() {
         // Set to date in the past
         ShiftDTO shiftDTO1 =
                 new ShiftDTO(73L, storeId, LocalDate.of(2022, 6, 1),
@@ -234,7 +234,8 @@ public class ShiftServiceUnitTests {
 
     @Test
     public void deleteEmployeeShift_ShiftExists_DeletesShiftSuccessfully() {
-        Mockito.when(shiftRepo.deleteShift(shift.getId())).thenReturn(shift);
+        Mockito.when(shiftRepo.shiftExists(shift.getId())).thenReturn(true);
+        Mockito.doNothing().when(shiftRepo).deleteShift(shift.getId());
 
         shiftService.deleteEmployeeShift(shift.getId());
 
@@ -242,9 +243,9 @@ public class ShiftServiceUnitTests {
     }
 
     @Test
-    public void deleteEmployeeShift_ShiftNonExistent_ThrowsShiftNotFoundException() {
-        Mockito.when(shiftRepo.deleteShift(7521L)).thenReturn(null);
+    public void deleteEmployeeShift_ShiftNonExistent_ThrowsInvalidRequestException() {
+        Mockito.when(shiftRepo.shiftExists(7521L)).thenReturn(false);
 
-        assertFalse(shiftService.deleteEmployeeShift(7521L));
+        assertThrows(InvalidRequestException.class, () -> shiftService.deleteEmployeeShift(7521L));
     }
 }
