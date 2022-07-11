@@ -46,7 +46,7 @@ public class EmployeeController {
     }
 
     // Method created for communication with FeignClient in Shift Service API
-    @GetMapping("/exists/{employeeId}")
+    @GetMapping("/{employeeId}/check")
     public boolean employeeExists(@PathVariable long employeeId) {
         return employeeService.employeeExists(employeeId);
     }

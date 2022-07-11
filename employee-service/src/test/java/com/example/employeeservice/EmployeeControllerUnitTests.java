@@ -132,7 +132,7 @@ public class EmployeeControllerUnitTests {
         Mockito.when(employeeService.employeeExists(employee.getId())).thenReturn(true);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/api/employee/exists/{employeeId}", employee.getId()))
+                .perform(MockMvcRequestBuilders.get("/api/employee/{employeeId}/check", employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(true));
     }
@@ -142,7 +142,7 @@ public class EmployeeControllerUnitTests {
         Mockito.when(employeeService.employeeExists(employee.getId())).thenReturn(false);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/api/employee/exists/{employeeId}", employee.getId()))
+                .perform(MockMvcRequestBuilders.get("/api/employee/{employeeId}/check", employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(false));
     }
