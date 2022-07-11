@@ -41,4 +41,9 @@ public class AddressJpaAdapter implements AddressPersistencePort {
     public Address deleteAddress(String storeId) {
         return addressRepo.deleteByStoreId(storeId);
     }
+
+    @Override
+    public boolean addressExists(String storeId) {
+        return addressRepo.existsById(storeId);
+    }
 }

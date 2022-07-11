@@ -85,13 +85,12 @@ public class AddressService implements AddressServicePort {
     @Transactional
     @Override
     public void deleteAddress(String storeId) {
-        Address deletedAddress = addressRepo.deleteAddress(storeId);
-
-        if (deletedAddress == null) {
+        if (addressRepo.addressExists(storeId)) {
+            addressRepo.deleteAddress(storeId);
+            log.info("Store with id " + storeId + " deleted");
+        } else {
             log.error("Store with id " + storeId + " not found");
             throw new InvalidRequestException("Store with id " + storeId + " not found");
         }
-
-        log.info("Store with id " + storeId + " deleted");
     }
 }
