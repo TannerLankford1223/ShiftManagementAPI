@@ -126,6 +126,7 @@ public class ShiftService implements ShiftServicePort {
 
         if (shiftRepo.shiftExists(shiftId)) {
             shiftRepo.deleteShift(shiftId);
+            log.info("Shift with id " + shiftId + " deleted");
         } else {
             log.error("Shift with id " + shiftId + " not found");
             throw new InvalidRequestException("Shift with id " + shiftId + " not found");
