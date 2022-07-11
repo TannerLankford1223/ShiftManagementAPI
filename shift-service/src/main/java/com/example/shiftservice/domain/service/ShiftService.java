@@ -1,7 +1,10 @@
 package com.example.shiftservice.domain.service;
 
+import com.example.shiftservice.domain.client.AddressClient;
 import com.example.shiftservice.domain.client.EmployeeClient;
-import com.example.shiftservice.domain.dto.*;
+import com.example.shiftservice.domain.dto.DailySchedule;
+import com.example.shiftservice.domain.dto.ScheduleRequest;
+import com.example.shiftservice.domain.dto.ShiftDTO;
 import com.example.shiftservice.domain.ports.api.ShiftServicePort;
 import com.example.shiftservice.domain.ports.spi.ShiftPersistencePort;
 import com.example.shiftservice.infrastructure.entity.Shift;
@@ -28,12 +31,15 @@ public class ShiftService implements ShiftServicePort {
     private final ShiftPersistencePort shiftRepo;
 
     private final EmployeeClient employeeClient;
+    private final AddressClient addressClient;
     private final ShiftMapper mapper;
 
 
-    public ShiftService(ShiftPersistencePort shiftRepo, EmployeeClient employeeClient, ShiftMapper mapper) {
+    public ShiftService(ShiftPersistencePort shiftRepo, EmployeeClient employeeClient, AddressClient addressClient,
+                        ShiftMapper mapper) {
         this.shiftRepo = shiftRepo;
         this.employeeClient = employeeClient;
+        this.addressClient = addressClient;
         this.mapper = mapper;
     }
 
@@ -74,10 +80,13 @@ public class ShiftService implements ShiftServicePort {
     @Override
     public List<DailySchedule> getEmployeeSchedule(ScheduleRequest scheduleRequest) {
         if (!employeeClient.employeeExists(scheduleRequest.getEmployeeId())) {
-            log.error("Employee with id " + scheduleRequest.getEmployeeId() + " does not exist");
-            throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() + " does not exist");
+            log.error("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
+            throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
         } else if (scheduleRequest.getEndDate().isBefore(scheduleRequest.getStartDate())) {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
+        } else if (!addressClient.addressExists(scheduleRequest.getStoreId())) {
+            log.error("Store with id " + scheduleRequest.getStoreId() + " not found");
+            throw new InvalidRequestException("Store with id " + scheduleRequest.getStoreId() + " not found");
         }
 
         List<Shift> shifts = shiftRepo.getEmployeeSchedule(scheduleRequest.getStoreId(), scheduleRequest.getEmployeeId(),
