@@ -50,11 +50,7 @@ public class AddressService implements AddressServicePort {
 
     @Override
     public List<AddressDTO> getAddresses() {
-        return convertToAddressDTOList(addressRepo.getAddresses());
-    }
-
-    private List<AddressDTO> convertToAddressDTOList(List<Address> addresses) {
-        return addresses.stream()
+        return addressRepo.getAddresses().stream()
                 .map(mapper::addressToAddressDTO)
                 .collect(Collectors.toList());
     }
