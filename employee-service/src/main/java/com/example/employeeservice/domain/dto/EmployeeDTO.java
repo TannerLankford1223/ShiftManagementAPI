@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class EmployeeDTO {
 
     @JsonProperty("employee_phone")
     @NotNull
-    @Size(min = 10, max = 10, message = "Phone number must be valid")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$")
     private String phoneNumber;
 
     public EmployeeDTO(String firstName, String lastName, String email, String phoneNumber) {
