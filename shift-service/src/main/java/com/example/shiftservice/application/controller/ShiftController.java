@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class ShiftController {
     }
 
     @PostMapping("/new-shift")
-    public ShiftDTO createShift(@RequestBody ShiftDTO shift) {
+    public ShiftDTO createShift(@Valid @RequestBody ShiftDTO shift) {
         return shiftService.createShift(shift);
     }
 
@@ -32,17 +33,17 @@ public class ShiftController {
     // Returns list of shifts for an employee for a given time period if the employee ID is specified in the
     // request body. Otherwise, it returns shifts for all employees.
     @GetMapping("/schedule")
-    public List<ShiftDTO> getWorkSchedule(@RequestBody ScheduleRequest scheduleRequest) {
+    public List<ShiftDTO> getWorkSchedule(@Valid @RequestBody ScheduleRequest scheduleRequest) {
         if (scheduleRequest.getEmployeeId() == 0) {
             return shiftService.getWorkSchedule(scheduleRequest);
         } else {
-            return shiftService.getWorkSchedule(scheduleRequest);
+            return shiftService.getEmployeeSchedule(scheduleRequest);
         }
     }
 
     // Posts a list of shifts for a given time period
     @PostMapping("/schedule")
-    public ResponseEntity<String> postWorkSchedule(@RequestBody List<ShiftDTO> shiftDTOS) {
+    public ResponseEntity<String> postWorkSchedule(@RequestBody List<@Valid ShiftDTO> shiftDTOS) {
         shiftService.postWorkSchedule(shiftDTOS);
         return new ResponseEntity<>("Work schedule successfully posted", HttpStatus.OK);
     }
