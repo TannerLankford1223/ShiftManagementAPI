@@ -31,7 +31,9 @@ public class EmployeeService implements EmployeeServicePort {
     @Override
     public EmployeeDTO registerEmployee(EmployeeDTO employeeDTO) {
         Employee employee = mapper.employeeDTOToEmployee(employeeDTO);
-        return mapper.employeeToEmployeeDTO(employeeRepo.saveEmployee(employee));
+        EmployeeDTO returnEmployeeDTO =  mapper.employeeToEmployeeDTO(employeeRepo.saveEmployee(employee));
+        log.info("Employee with id " + employee.getId() + " is registered");
+        return returnEmployeeDTO;
     }
 
     @Override
@@ -67,6 +69,7 @@ public class EmployeeService implements EmployeeServicePort {
             employee.setEmail(employeeDTO.getEmail());
             employee.setPhoneNumber(employeeDTO.getPhoneNumber());
 
+            log.info("Employee with id " + employee.getId() + " has been updated");
             return mapper.employeeToEmployeeDTO(employeeRepo.saveEmployee(employee));
         }
 
@@ -78,6 +81,7 @@ public class EmployeeService implements EmployeeServicePort {
     @Override
     public void deleteEmployee(long employeeId) {
         if (employeeExists(employeeId)) {
+            log.info("Employee with id " + employeeId + " is deleted");
             employeeRepo.deleteEmployee(employeeId);
         } else {
             log.error("Employee with id " + employeeId + " not found");
