@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-    public EmployeeDTO registerEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public EmployeeDTO registerEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         return employeeService.registerEmployee(employeeDTO);
     }
 
@@ -34,7 +35,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/update/{employeeId}")
-    public EmployeeDTO updateEmployee(@PathVariable long employeeId, @RequestBody EmployeeDTO employeeDTO) {
+    public EmployeeDTO updateEmployee(@PathVariable long employeeId, @Valid @RequestBody EmployeeDTO employeeDTO) {
         employeeDTO.setId(employeeId);
         return employeeService.updateEmployee(employeeDTO);
     }
