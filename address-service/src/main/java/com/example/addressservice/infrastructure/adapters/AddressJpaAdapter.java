@@ -33,11 +33,6 @@ public class AddressJpaAdapter implements AddressPersistencePort {
     }
 
     @Override
-    public List<Address> getAddressesInState(String state) {
-        return addressRepo.findAllByState(state);
-    }
-
-    @Override
     public void deleteAddress(long storeId) {
         addressRepo.deleteByStoreId(storeId);
     }

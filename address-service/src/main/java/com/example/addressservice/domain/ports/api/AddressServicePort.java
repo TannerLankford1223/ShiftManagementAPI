@@ -12,8 +12,6 @@ public interface AddressServicePort {
 
     List<AddressDTO> getAddresses();
 
-    List<AddressDTO> getAddressesInState(String state);
-
     AddressDTO updateAddress(AddressDTO addressDTO);
 
     void deleteAddress(long storeId);

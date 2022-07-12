@@ -33,11 +33,6 @@ public class AddressController {
         return addressService.getAddresses();
     }
 
-    @GetMapping("/address-list/{state}")
-    public List<AddressDTO> getAddressListByState(@PathVariable String state) {
-        return addressService.getAddressesInState(state);
-    }
-
     @PutMapping("/update/{storeId}")
     public AddressDTO updateAddress(@PathVariable long storeId, @RequestBody AddressDTO addressDTO) {
         addressDTO.setStoreId(storeId);

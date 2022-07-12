@@ -31,8 +31,9 @@ public class AddressService implements AddressServicePort {
     @Override
     public AddressDTO saveAddress(AddressDTO addressDTO) {
         Address address = mapper.addressDTOToAddress(addressDTO);
-        log.info("Store with id " + address.getStoreId() + " added");
-        return mapper.addressToAddressDTO(addressRepo.saveAddress(address));
+        AddressDTO returnAddressDTO =  mapper.addressToAddressDTO(addressRepo.saveAddress(address));
+        log.info("Store with id " + returnAddressDTO.getStoreId() + " added");
+        return returnAddressDTO;
     }
 
     @Override
@@ -50,11 +51,6 @@ public class AddressService implements AddressServicePort {
     @Override
     public List<AddressDTO> getAddresses() {
         return convertToAddressDTOList(addressRepo.getAddresses());
-    }
-
-    @Override
-    public List<AddressDTO> getAddressesInState(String state) {
-        return convertToAddressDTOList(addressRepo.getAddressesInState(state));
     }
 
     private List<AddressDTO> convertToAddressDTOList(List<Address> addresses) {

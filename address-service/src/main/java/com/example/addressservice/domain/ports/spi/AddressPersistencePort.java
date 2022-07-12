@@ -13,8 +13,6 @@ public interface AddressPersistencePort {
 
     List<Address> getAddresses();
 
-    List<Address> getAddressesInState(String state);
-
     void deleteAddress(long storeId);
 
     boolean addressExists(long storeId);
