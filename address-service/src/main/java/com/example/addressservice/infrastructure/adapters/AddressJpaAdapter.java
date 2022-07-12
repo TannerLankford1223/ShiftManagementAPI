@@ -23,7 +23,7 @@ public class AddressJpaAdapter implements AddressPersistencePort {
     }
 
     @Override
-    public Optional<Address> getAddress(String storeId) {
+    public Optional<Address> getAddress(long storeId) {
         return addressRepo.findById(storeId);
     }
 
@@ -38,12 +38,12 @@ public class AddressJpaAdapter implements AddressPersistencePort {
     }
 
     @Override
-    public void deleteAddress(String storeId) {
+    public void deleteAddress(long storeId) {
         addressRepo.deleteByStoreId(storeId);
     }
 
     @Override
-    public boolean addressExists(String storeId) {
+    public boolean addressExists(long storeId) {
         return addressRepo.existsById(storeId);
     }
 }

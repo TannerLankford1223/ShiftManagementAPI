@@ -39,7 +39,7 @@ public class AddressServiceUnitTests {
     public void init() {
         this.mapper = new AddressMapperImpl();
         this.addressService = new AddressService(addressRepo, mapper);
-        this.request = new AddressDTO("Store1001","123 Main Street", "City",
+        this.request = new AddressDTO(452L,"123 Main Street", "City",
                 "State", 12345);
         this.address = mapper.addressDTOToAddress(request);
     }
@@ -52,7 +52,7 @@ public class AddressServiceUnitTests {
         AddressDTO response = addressService.saveAddress(request);
 
         verify(addressRepo).saveAddress(address);
-        assertEquals("Store1001", response.getStoreId());
+        assertEquals(452L, response.getStoreId());
         assertEquals("123 Main Street", response.getAddress());
         assertEquals("City", response.getCity());
         assertEquals("State", response.getState());
@@ -65,7 +65,7 @@ public class AddressServiceUnitTests {
 
         AddressDTO response = addressService.getAddress(address.getStoreId());
 
-        assertEquals("Store1001", response.getStoreId());
+        assertEquals(452L, response.getStoreId());
         assertEquals("123 Main Street", response.getAddress());
         assertEquals("City", response.getCity());
         assertEquals("State", response.getState());
@@ -74,16 +74,16 @@ public class AddressServiceUnitTests {
 
     @Test
     public void getAddress_AddressNonExistent_ThrowsInvalidRequestException() {
-        Mockito.when(addressRepo.getAddress("fakeStore")).thenReturn(Optional.empty());
+        Mockito.when(addressRepo.getAddress(5000L)).thenReturn(Optional.empty());
 
-        assertThrows(InvalidRequestException.class, () -> addressService.getAddress("fakeStore"));
+        assertThrows(InvalidRequestException.class, () -> addressService.getAddress(5000L));
     }
 
     @Test
     public void getAddresses_ReturnsListOfAddressDTOs() {
-        Address address1 = new Address("Store483","1321 Maryland Street", "City",
+        Address address1 = new Address(483L,"1321 Maryland Street", "City",
                 "State", 11111);
-        Address address2 = new Address("Store8321","9220 Pennsylvania Avenue", "City",
+        Address address2 = new Address(8321L,"9220 Pennsylvania Avenue", "City",
                 "State", 22222);
 
         Mockito.when(addressRepo.getAddresses()).thenReturn(List.of(address, address1, address2));
@@ -95,11 +95,11 @@ public class AddressServiceUnitTests {
 
     @Test
     public void getAddressesInState_ReturnsListOfAddressDTOsFromState() {
-        Address address1 = new Address("Store483","1321 Maryland Street", "City",
+        Address address1 = new Address(483L,"1321 Maryland Street", "City",
                 "State", 11111);
-        Address address2 = new Address("Store8321","9220 Pennsylvania Avenue", "City",
+        Address address2 = new Address(8321L,"9220 Pennsylvania Avenue", "City",
                 "State", 22222);
-        Address address3 = new Address("Store8321","909 Broadway Boulevard", "City",
+        Address address3 = new Address(8321L,"909 Broadway Boulevard", "City",
                 "State", 33333);
 
         Mockito.when(addressRepo.getAddressesInState(address.getState()))
@@ -112,7 +112,7 @@ public class AddressServiceUnitTests {
 
     @Test
     public void updateAddress_AddressExists_ReturnsAddressDTO() {
-        AddressDTO update = new AddressDTO("Store1001", "1421 West Main Street", "Philadelphia",
+        AddressDTO update = new AddressDTO(452L, "1421 West Main Street", "Philadelphia",
                 "Pennsylvania", 54321);
 
         Address updatedAddress = mapper.addressDTOToAddress(update);
@@ -122,7 +122,7 @@ public class AddressServiceUnitTests {
 
         AddressDTO response = addressService.updateAddress(update);
 
-        assertEquals("Store1001", response.getStoreId());
+        assertEquals(452L, response.getStoreId());
         assertEquals("1421 West Main Street", response.getAddress());
         assertEquals("Philadelphia", response.getCity());
         assertEquals("Pennsylvania", response.getState());
@@ -147,9 +147,9 @@ public class AddressServiceUnitTests {
 
     @Test
     public void deleteAddress_AddressNonExistent_ThrowsInvalidRequestException() {
-        Mockito.when(addressRepo.addressExists("fakeStore")).thenReturn(false);
+        Mockito.when(addressRepo.addressExists(5000L)).thenReturn(false);
 
-        assertThrows(InvalidRequestException.class, () -> addressService.deleteAddress("fakeStore"));
+        assertThrows(InvalidRequestException.class, () -> addressService.deleteAddress(5000L));
     }
 
 }

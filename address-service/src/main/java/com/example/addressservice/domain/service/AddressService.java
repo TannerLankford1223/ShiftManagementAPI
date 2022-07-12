@@ -36,7 +36,7 @@ public class AddressService implements AddressServicePort {
     }
 
     @Override
-    public AddressDTO getAddress(String storeId) {
+    public AddressDTO getAddress(long storeId) {
         Optional<Address> addressOpt = addressRepo.getAddress(storeId);
 
         if (addressOpt.isPresent()) {
@@ -84,7 +84,7 @@ public class AddressService implements AddressServicePort {
 
     @Transactional
     @Override
-    public void deleteAddress(String storeId) {
+    public void deleteAddress(long storeId) {
         if (addressExists(storeId)) {
             addressRepo.deleteAddress(storeId);
             log.info("Store with id " + storeId + " deleted");
@@ -95,7 +95,7 @@ public class AddressService implements AddressServicePort {
     }
 
     @Override
-    public boolean addressExists(String storeId) {
+    public boolean addressExists(long storeId) {
         return addressRepo.addressExists(storeId);
     }
 }

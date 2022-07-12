@@ -9,13 +9,13 @@ public interface AddressPersistencePort {
 
     Address saveAddress(Address address);
 
-    Optional<Address> getAddress(String storeId);
+    Optional<Address> getAddress(long storeId);
 
     List<Address> getAddresses();
 
     List<Address> getAddressesInState(String state);
 
-    void deleteAddress(String storeId);
+    void deleteAddress(long storeId);
 
-    boolean addressExists(String storeId);
+    boolean addressExists(long storeId);
 }

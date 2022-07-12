@@ -24,7 +24,7 @@ public class AddressController {
     }
 
     @GetMapping("/{storeId}")
-    public AddressDTO getAddress(@PathVariable String storeId) {
+    public AddressDTO getAddress(@PathVariable long storeId) {
         return addressService.getAddress(storeId);
     }
 
@@ -39,19 +39,19 @@ public class AddressController {
     }
 
     @PutMapping("/update/{storeId}")
-    public AddressDTO updateAddress(@PathVariable String storeId, @RequestBody AddressDTO addressDTO) {
+    public AddressDTO updateAddress(@PathVariable long storeId, @RequestBody AddressDTO addressDTO) {
         addressDTO.setStoreId(storeId);
         return addressService.updateAddress(addressDTO);
     }
 
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<String> deleteAddress(@PathVariable String storeId) {
+    public ResponseEntity<String> deleteAddress(@PathVariable long storeId) {
         addressService.deleteAddress(storeId);
         return new ResponseEntity<>("Store with id " + storeId + " deleted", HttpStatus.OK);
     }
 
     @GetMapping("/{storeId}/check")
-    public boolean addressExists(@PathVariable String storeId) {
+    public boolean addressExists(@PathVariable long storeId) {
         return addressService.addressExists(storeId);
     }
 }

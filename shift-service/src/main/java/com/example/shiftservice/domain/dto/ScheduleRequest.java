@@ -20,7 +20,7 @@ public class ScheduleRequest {
 
     @JsonProperty("store_id")
     @NotNull
-    private String storeId;
+    private long storeId;
 
     @JsonProperty("start_date")
     @NotNull
@@ -30,7 +30,7 @@ public class ScheduleRequest {
     @NotNull
     private LocalDate endDate;
 
-    public ScheduleRequest(String storeId, LocalDate startDate, LocalDate endDate) {
+    public ScheduleRequest(long storeId, LocalDate startDate, LocalDate endDate) {
         this.storeId = storeId;
         this.startDate = startDate;
         this.endDate = endDate;

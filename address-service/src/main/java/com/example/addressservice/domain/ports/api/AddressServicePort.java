@@ -8,7 +8,7 @@ public interface AddressServicePort {
 
     AddressDTO saveAddress(AddressDTO addressDTO);
 
-    AddressDTO getAddress(String storeId);
+    AddressDTO getAddress(long storeId);
 
     List<AddressDTO> getAddresses();
 
@@ -16,7 +16,7 @@ public interface AddressServicePort {
 
     AddressDTO updateAddress(AddressDTO addressDTO);
 
-    void deleteAddress(String storeId);
+    void deleteAddress(long storeId);
 
-    boolean addressExists(String storeId);
+    boolean addressExists(long storeId);
 }

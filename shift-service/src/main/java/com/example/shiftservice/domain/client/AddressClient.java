@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface AddressClient {
 
     @GetMapping("/api/address/{storeId}/check")
-    boolean addressExists(@PathVariable String storeId);
+    boolean addressExists(@PathVariable long storeId);
 }
 
 @Slf4j
 class AddressFallback implements AddressClient {
 
     @Override
-    public boolean addressExists(String storeId) {
+    public boolean addressExists(long storeId) {
         log.error("Unable to connect to address-service server");
         return false;
     }

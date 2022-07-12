@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class AddressDTO {
 
     @JsonProperty("store_id")
-    private String storeId;
+    private long storeId;
 
     @JsonProperty("store_address")
     @NotNull

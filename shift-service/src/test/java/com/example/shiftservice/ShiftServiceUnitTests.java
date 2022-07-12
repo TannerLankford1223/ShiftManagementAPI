@@ -44,7 +44,7 @@ public class ShiftServiceUnitTests {
     private Shift shift;
     private ShiftDTO shiftDTO;
     private ShiftDTO shiftResponse;
-    private String storeId = "Store1001";
+    private final long storeId = 1001;
 
     @BeforeEach
     public void init() {

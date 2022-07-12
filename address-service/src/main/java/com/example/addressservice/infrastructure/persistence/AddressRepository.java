@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AddressRepository extends JpaRepository<Address, String> {
+public interface AddressRepository extends JpaRepository<Address, Long> {
 
     List<Address> findAllByState(String state);
 
-    void deleteByStoreId(String storeId);
+    void deleteByStoreId(long storeId);
 }
