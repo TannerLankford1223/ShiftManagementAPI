@@ -33,9 +33,9 @@ public class AddressDTO {
     @JsonProperty("zip_code")
     @NotNull
     @Size(min = 5, max = 5, message = "Zip Code must be 5 digits in length")
-    private int zipCode;
+    private String zipCode;
 
-    public AddressDTO(String address, String city, String state, int zipCode) {
+    public AddressDTO(String address, String city, String state, String zipCode) {
         this.address = address;
         this.city = city;
         this.state = state;

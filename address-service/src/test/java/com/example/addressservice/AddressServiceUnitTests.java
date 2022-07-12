@@ -40,7 +40,7 @@ public class AddressServiceUnitTests {
         this.mapper = new AddressMapperImpl();
         this.addressService = new AddressService(addressRepo, mapper);
         this.request = new AddressDTO(452L,"123 Main Street", "City",
-                "State", 12345);
+                "State", "12345");
         this.address = mapper.addressDTOToAddress(request);
     }
 
@@ -56,7 +56,7 @@ public class AddressServiceUnitTests {
         assertEquals("123 Main Street", response.getAddress());
         assertEquals("City", response.getCity());
         assertEquals("State", response.getState());
-        assertEquals(12345, response.getZipCode());
+        assertEquals("12345", response.getZipCode());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class AddressServiceUnitTests {
         assertEquals("123 Main Street", response.getAddress());
         assertEquals("City", response.getCity());
         assertEquals("State", response.getState());
-        assertEquals(12345, response.getZipCode());
+        assertEquals("12345", response.getZipCode());
     }
 
     @Test
@@ -82,9 +82,9 @@ public class AddressServiceUnitTests {
     @Test
     public void getAddresses_ReturnsListOfAddressDTOs() {
         Address address1 = new Address(483L,"1321 Maryland Street", "City",
-                "State", 11111);
+                "State", "11111");
         Address address2 = new Address(8321L,"9220 Pennsylvania Avenue", "City",
-                "State", 22222);
+                "State", "22222");
 
         Mockito.when(addressRepo.getAddresses()).thenReturn(List.of(address, address1, address2));
 
@@ -94,26 +94,9 @@ public class AddressServiceUnitTests {
     }
 
     @Test
-    public void getAddressesInState_ReturnsListOfAddressDTOsFromState() {
-        Address address1 = new Address(483L,"1321 Maryland Street", "City",
-                "State", 11111);
-        Address address2 = new Address(8321L,"9220 Pennsylvania Avenue", "City",
-                "State", 22222);
-        Address address3 = new Address(8321L,"909 Broadway Boulevard", "City",
-                "State", 33333);
-
-        Mockito.when(addressRepo.getAddressesInState(address.getState()))
-                .thenReturn(List.of(address, address1, address2, address3));
-
-        List<AddressDTO> addresses = addressService.getAddressesInState(address.getState());
-
-        assertEquals(4, addresses.size());
-    }
-
-    @Test
     public void updateAddress_AddressExists_ReturnsAddressDTO() {
         AddressDTO update = new AddressDTO(452L, "1421 West Main Street", "Philadelphia",
-                "Pennsylvania", 54321);
+                "Pennsylvania", "54321");
 
         Address updatedAddress = mapper.addressDTOToAddress(update);
 
@@ -126,7 +109,7 @@ public class AddressServiceUnitTests {
         assertEquals("1421 West Main Street", response.getAddress());
         assertEquals("Philadelphia", response.getCity());
         assertEquals("Pennsylvania", response.getState());
-        assertEquals(54321, response.getZipCode());
+        assertEquals("54321", response.getZipCode());
     }
 
     @Test

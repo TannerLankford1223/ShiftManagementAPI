@@ -47,7 +47,7 @@ public class AddressControllerUnitTests {
     public void init() {
         this.addressMapper = new AddressMapperImpl();
         this.request = new AddressDTO(1001L, "123 Main Street", "City",
-                "State", 12345);
+                "State", "12345");
         this.address = addressMapper.addressDTOToAddress(request);
         this.response = addressMapper.addressToAddressDTO(address);
     }
@@ -84,9 +84,9 @@ public class AddressControllerUnitTests {
     @Test
     public void getAddressList_ReturnsListOfAddressDTOs() throws Exception {
         AddressDTO response1 = new AddressDTO(542L, "111 East Briar Lane", "Nashville",
-                "Tennessee", 89532);
+                "Tennessee", "89532");
         AddressDTO response2 = new AddressDTO(16L, "3089 West Grand Boulevard", "Kansas City",
-                "Missouri", 11111);
+                "Missouri", "11111");
 
         Mockito.when(addressService.getAddresses()).thenReturn(List.of(response, response1, response2));
 
@@ -96,23 +96,9 @@ public class AddressControllerUnitTests {
     }
 
     @Test
-    public void getAddressListByState_ReturnsListOfAddressAddressDTOsFromState() throws Exception {
-        AddressDTO response = new AddressDTO(542L, "111 East Briar Lane", "Nashville",
-                "Missouri", 89532);
-        AddressDTO response1 = new AddressDTO(16L, "3089 West Grand Boulevard", "Kansas City",
-                "Missouri", 11111);
-
-        Mockito.when(addressService.getAddressesInState("Missouri")).thenReturn(List.of(response, response1));
-
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/address-list/{state}", "Missouri"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(2));
-    }
-
-    @Test
     public void updateAddress_ReturnsAddressDTO() throws Exception {
         AddressDTO update = new AddressDTO(1001L, "1421 West Main Street", "Philadelphia",
-                "Pennsylvania", 54321);
+                "Pennsylvania", "54321");
 
         Mockito.when(addressService.updateAddress(update)).thenReturn(update);
 
