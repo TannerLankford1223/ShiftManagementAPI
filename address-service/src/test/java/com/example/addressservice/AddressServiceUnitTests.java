@@ -18,8 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -133,6 +132,26 @@ public class AddressServiceUnitTests {
         Mockito.when(addressRepo.addressExists(5000L)).thenReturn(false);
 
         assertThrows(InvalidRequestException.class, () -> addressService.deleteAddress(5000L));
+    }
+
+    @Test
+    public void addressExists_ReturnsTrue() {
+        Mockito.when(addressRepo.addressExists(address.getStoreId())).thenReturn(true);
+
+        addressService.addressExists(address.getStoreId());
+
+        verify(addressRepo).addressExists(address.getStoreId());
+        assertTrue(addressService.addressExists(address.getStoreId()));
+    }
+
+    @Test
+    public void addressNonExistent_ReturnsFalse() {
+        Mockito.when(addressRepo.addressExists(5000L)).thenReturn(false);
+
+        addressService.addressExists(5000L);
+
+        verify(addressRepo).addressExists(5000L);
+        assertFalse(addressService.addressExists(5000L));
     }
 
 }

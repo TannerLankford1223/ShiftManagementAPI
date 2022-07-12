@@ -127,4 +127,23 @@ public class AddressControllerUnitTests {
 
         assertEquals("Store with id " + address.getStoreId() + " deleted", content);
     }
+
+    @Test
+    public void addressExists_ReturnsTrue() throws Exception {
+        Mockito.when(addressService.addressExists(address.getStoreId())).thenReturn(true);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/{storeId}/check",
+                address.getStoreId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(true));
+    }
+
+    @Test
+    public void addressNonExistent_ReturnsFalse() throws Exception {
+        Mockito.when(addressService.addressExists(5000L)).thenReturn(false);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/{storeId}/check", 5000L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(false));
+    }
 }
