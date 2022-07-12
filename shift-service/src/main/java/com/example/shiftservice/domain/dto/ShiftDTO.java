@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -23,23 +21,18 @@ public class ShiftDTO {
     private long shiftId;
 
     @JsonProperty("employee_id")
-    @NotNull
     private long employeeId;
 
     @JsonProperty("store_id")
-    @NotNull
     private long storeId;
 
     @JsonProperty("shift_date")
-    @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}")
     private LocalDate shiftDate;
 
     @JsonProperty("start_time")
-    @NotNull
     private LocalTime startTime;
 
     @JsonProperty("end_time")
-    @NotNull
     private LocalTime endTime;
 
     public ShiftDTO(long employeeId, long storeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
