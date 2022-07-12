@@ -34,7 +34,8 @@ public class EmployeeDTO {
 
     @JsonProperty("employee_phone")
     @NotNull
-    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$",
+            message = "Please enter a valid phone number")
     private String phoneNumber;
 
     public EmployeeDTO(String firstName, String lastName, String email, String phoneNumber) {
