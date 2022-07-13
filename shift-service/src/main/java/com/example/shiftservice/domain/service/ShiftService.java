@@ -10,6 +10,7 @@ import com.example.shiftservice.infrastructure.entity.Shift;
 import com.example.shiftservice.infrastructure.exceptionhandler.InvalidRequestException;
 import com.example.shiftservice.infrastructure.exceptionhandler.ShiftNotFoundException;
 import com.example.shiftservice.infrastructure.mapper.ShiftMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ShiftService implements ShiftServicePort {
 
     private final String START_TIME = "08:00";
@@ -36,20 +38,14 @@ public class ShiftService implements ShiftServicePort {
     private final ShiftMapper mapper;
 
 
-    public ShiftService(ShiftPersistencePort shiftRepo, EmployeeClient employeeClient, AddressClient addressClient,
-                        ShiftMapper mapper) {
-        this.shiftRepo = shiftRepo;
-        this.employeeClient = employeeClient;
-        this.addressClient = addressClient;
-        this.mapper = mapper;
-    }
-
     @Transactional
     @Override
     public ShiftDTO createShift(ShiftDTO shiftDTO) {
         if (isValidShiftRequest(shiftDTO)) {
             Shift shift = mapper.shiftDTOToShift(shiftDTO);
-            return mapper.shiftToShiftDTO(shiftRepo.createShift(shift));
+            ShiftDTO returnShiftDTO = mapper.shiftToShiftDTO(shiftRepo.createShift(shift));
+            log.info("Shift with id: " + returnShiftDTO.getShiftId() + " created");
+            return returnShiftDTO;
         } else {
             throw new InvalidRequestException("Invalid shift request");
         }
