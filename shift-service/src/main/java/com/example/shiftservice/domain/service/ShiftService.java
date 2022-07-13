@@ -58,7 +58,7 @@ public class ShiftService implements ShiftServicePort {
         if (shiftOpt.isPresent()) {
             return mapper.shiftToShiftDTO(shiftOpt.get());
         }
-        log.error("Unable to find shift with id " + shiftId);
+        log.warn("Unable to find shift with id " + shiftId);
         throw new ShiftNotFoundException(shiftId);
     }
 
@@ -79,12 +79,13 @@ public class ShiftService implements ShiftServicePort {
     @Override
     public List<ShiftDTO> getEmployeeSchedule(ScheduleRequest scheduleRequest) {
         if (!employeeClient.employeeExists(scheduleRequest.getEmployeeId())) {
-            log.error("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
+            log.warn("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
             throw new InvalidRequestException("Employee with id " + scheduleRequest.getEmployeeId() + " not found");
         } else if (scheduleRequest.getEndDate().isBefore(scheduleRequest.getStartDate())) {
+            log.warn("Invalid time period");
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
         } else if (!addressClient.addressExists(scheduleRequest.getStoreId())) {
-            log.error("Store with id " + scheduleRequest.getStoreId() + " not found");
+            log.warn("Store with id " + scheduleRequest.getStoreId() + " not found");
             throw new InvalidRequestException("Store with id " + scheduleRequest.getStoreId() + " not found");
         }
 
@@ -120,7 +121,7 @@ public class ShiftService implements ShiftServicePort {
             shiftRepo.deleteShift(shiftId);
             log.info("Shift with id " + shiftId + " deleted");
         } else {
-            log.error("Shift with id " + shiftId + " not found");
+            log.warn("Shift with id " + shiftId + " not found");
             throw new InvalidRequestException("Shift with id " + shiftId + " not found");
         }
     }
@@ -128,14 +129,14 @@ public class ShiftService implements ShiftServicePort {
     @Override
     public boolean isValidShiftRequest(ShiftDTO shiftDTO) {
         if (!employeeClient.employeeExists(shiftDTO.getEmployeeId())) {
-            log.error("Employee with id " + shiftDTO.getEmployeeId() + " not found");
+            log.warn("Employee with id " + shiftDTO.getEmployeeId() + " not found");
             return false;
         } else if (shiftDTO.getShiftDate().isBefore(LocalDate.now())) {
-            log.error("Invalid date: date must be on or after " + LocalDate.now());
+            log.warn("Invalid date: date must be on or after " + LocalDate.now());
             return false;
         } else if (shiftDTO.getStartTime().isBefore(LocalTime.parse(START_TIME))
                 || shiftDTO.getEndTime().isAfter(LocalTime.parse(END_TIME))) {
-            log.error("Employee shift times need to start on or after "
+            log.warn("Employee shift times need to start on or after "
                     + LocalTime.parse(START_TIME) + " (8:00AM) and end on or before " + LocalTime.parse(END_TIME)
                     + " (5:00PM)");
             return false;

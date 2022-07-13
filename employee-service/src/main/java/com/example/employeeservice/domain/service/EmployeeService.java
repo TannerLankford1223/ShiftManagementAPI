@@ -40,7 +40,7 @@ public class EmployeeService implements EmployeeServicePort {
         if (employeeOpt.isPresent()) {
             return mapper.employeeToEmployeeDTO(employeeOpt.get());
         } else {
-            log.error("Employee with id " + employeeId + " not found");
+            log.warn("Employee with id " + employeeId + " not found");
             throw new InvalidRequestException("User with id " + employeeId + " not found");
         }
     }
@@ -70,7 +70,7 @@ public class EmployeeService implements EmployeeServicePort {
             return mapper.employeeToEmployeeDTO(employeeRepo.saveEmployee(employee));
         }
 
-        log.error("Employee with id " + employeeDTO.getId() + " not found");
+        log.warn("Employee with id " + employeeDTO.getId() + " not found");
         throw new InvalidRequestException("Employee with id " + employeeDTO.getId() + " not found");
     }
 
@@ -81,7 +81,7 @@ public class EmployeeService implements EmployeeServicePort {
             log.info("Employee with id " + employeeId + " is deleted");
             employeeRepo.deleteEmployee(employeeId);
         } else {
-            log.error("Employee with id " + employeeId + " not found");
+            log.warn("Employee with id " + employeeId + " not found");
             throw new InvalidRequestException("Employee with id " + employeeId + " not found");
         }
     }

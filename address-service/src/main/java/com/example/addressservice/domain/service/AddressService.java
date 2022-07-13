@@ -41,7 +41,7 @@ public class AddressService implements AddressServicePort {
             return mapper.addressToAddressDTO(addressOpt.get());
         }
 
-        log.error("Store with id " + storeId + " not found");
+        log.warn("Store with id " + storeId + " not found");
         throw new InvalidRequestException("Store with id " + storeId + " not found");
     }
 
@@ -67,7 +67,7 @@ public class AddressService implements AddressServicePort {
            return mapper.addressToAddressDTO(addressRepo.saveAddress(address));
         }
 
-        log.error("Store with id " + addressDTO.getStoreId() + " not found");
+        log.warn("Store with id " + addressDTO.getStoreId() + " not found");
         throw new InvalidRequestException("Store with id " + addressDTO.getStoreId() + " not found");
     }
 
@@ -78,7 +78,7 @@ public class AddressService implements AddressServicePort {
             addressRepo.deleteAddress(storeId);
             log.info("Store with id " + storeId + " deleted");
         } else {
-            log.error("Store with id " + storeId + " not found");
+            log.warn("Store with id " + storeId + " not found");
             throw new InvalidRequestException("Store with id " + storeId + " not found");
         }
     }
