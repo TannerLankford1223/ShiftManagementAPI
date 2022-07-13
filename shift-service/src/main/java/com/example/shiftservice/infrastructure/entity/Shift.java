@@ -24,13 +24,10 @@ public class Shift {
 
     private long storeId;
 
-    @Temporal(TemporalType.DATE)
     private LocalDate shiftDate;
 
-    @Temporal(TemporalType.TIME)
     private LocalTime startTime;
-
-    @Temporal(TemporalType.TIME)
+    
     private LocalTime endTime;
 
     public Shift(long employeeId, long storeId, LocalDate shiftDate, LocalTime startTime, LocalTime endTime) {
