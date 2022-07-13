@@ -6,6 +6,7 @@ import com.example.employeeservice.domain.ports.spi.EmployeePersistencePort;
 import com.example.employeeservice.infrastructure.entity.Employee;
 import com.example.employeeservice.infrastructure.exceptionhandler.InvalidRequestException;
 import com.example.employeeservice.infrastructure.mapper.EmployeeMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmployeeService implements EmployeeServicePort {
 
     private final EmployeePersistencePort employeeRepo;
 
     private final EmployeeMapper mapper;
-
-    public EmployeeService(EmployeePersistencePort employeeRepo, EmployeeMapper mapper) {
-        this.employeeRepo = employeeRepo;
-        this.mapper = mapper;
-    }
 
     @Transactional
     @Override
