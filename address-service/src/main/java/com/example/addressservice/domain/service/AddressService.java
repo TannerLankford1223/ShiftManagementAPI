@@ -6,6 +6,7 @@ import com.example.addressservice.domain.ports.spi.AddressPersistencePort;
 import com.example.addressservice.infrastructure.entity.Address;
 import com.example.addressservice.infrastructure.exceptionhandler.InvalidRequestException;
 import com.example.addressservice.infrastructure.mapper.AddressMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AddressService implements AddressServicePort {
 
     private final AddressPersistencePort addressRepo;
 
     private final AddressMapper mapper;
-
-    public AddressService(AddressPersistencePort addressRepo, AddressMapper mapper) {
-        this.addressRepo = addressRepo;
-        this.mapper = mapper;
-    }
 
     @Transactional
     @Override
