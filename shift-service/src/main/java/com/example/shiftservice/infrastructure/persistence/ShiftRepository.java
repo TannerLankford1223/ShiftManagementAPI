@@ -15,5 +15,5 @@ public interface ShiftRepository extends JpaRepository<Shift, Long> {
     List<Shift> findAllByStoreIdAndEmployeeIdAndShiftDateBetween(long storeId, long employeeId,
                                                                  LocalDate startDate, LocalDate endDate);
 
-    Shift deleteShiftById(long shiftId);
+    void deleteShiftById(long shiftId);
 }
