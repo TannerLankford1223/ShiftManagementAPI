@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "employee-service", fallback = EmployeeClientFallback.class)
 public interface EmployeeClient {
 
-    @GetMapping("/api/employee/{employeeId}/check")
+    @GetMapping("/api/v1/employee/{employeeId}/check")
     boolean employeeExists(@PathVariable long employeeId);
 }

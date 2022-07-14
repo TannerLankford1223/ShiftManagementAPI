@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "address-service", fallback = AddressClientFallback.class)
 public interface AddressClient {
 
-    @GetMapping("/api/address/{storeId}/check")
+    @GetMapping("/api/v1/address/{storeId}/check")
     boolean addressExists(@PathVariable long storeId);
 }
