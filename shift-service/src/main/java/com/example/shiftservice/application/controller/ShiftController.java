@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/shift")
+@RequestMapping("/api/v1/shift")
 public class ShiftController {
 
     private final ShiftServicePort shiftService;
@@ -21,6 +21,7 @@ public class ShiftController {
     }
 
     @PostMapping("/new-shift")
+    @ResponseStatus(HttpStatus.CREATED)
     public ShiftDTO createShift(@Valid @RequestBody ShiftDTO shift) {
         return shiftService.createShift(shift);
     }
@@ -32,7 +33,7 @@ public class ShiftController {
 
     // Returns list of shifts for an employee for a given time period if the employee ID is specified in the
     // request body. Otherwise, it returns shifts for all employees.
-    @GetMapping("/schedule")
+    @PostMapping("/schedule")
     public List<ShiftDTO> getWorkSchedule(@Valid @RequestBody ScheduleRequest scheduleRequest) {
         if (scheduleRequest.getEmployeeId() == 0) {
             return shiftService.getWorkSchedule(scheduleRequest);
@@ -42,7 +43,8 @@ public class ShiftController {
     }
 
     // Posts a list of shifts for a given time period
-    @PostMapping("/schedule")
+    @PostMapping("/new-schedule")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> postWorkSchedule(@RequestBody List<@Valid ShiftDTO> shiftDTOS) {
         shiftService.postWorkSchedule(shiftDTOS);
         return new ResponseEntity<>("Work schedule successfully posted", HttpStatus.OK);

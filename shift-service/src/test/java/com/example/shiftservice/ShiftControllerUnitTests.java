@@ -47,6 +47,8 @@ public class ShiftControllerUnitTests {
     private ShiftDTO response;
     private final long storeId = 1001L;
 
+    private final String route  = "/api/v1/shift/";
+
     @BeforeEach
     public void init() {
         this.shiftMapper = new ShiftMapperImpl();
@@ -61,11 +63,11 @@ public class ShiftControllerUnitTests {
     public void createShift_ReturnsShiftResponse() throws Exception {
         Mockito.when(shiftService.createShift(request)).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/shift/new-shift")
+        this.mockMvc.perform(MockMvcRequestBuilders.post(route + "new-shift")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.shift_id").value(shift.getId()))
                 .andExpect(jsonPath("$.employee_id").value(shift.getEmployeeId()))
                 .andExpect(jsonPath("$.shift_date").value(shift.getShiftDate().toString()))
@@ -77,7 +79,7 @@ public class ShiftControllerUnitTests {
     public void getEmployeeShift_ReturnsShiftResponse() throws Exception {
         Mockito.when(shiftService.getEmployeeShift(shift.getId())).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/{shiftId}", shift.getId())
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "{shiftId}", shift.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.shift_id").value(shift.getId()))
@@ -105,7 +107,7 @@ public class ShiftControllerUnitTests {
         Mockito.when(shiftService.getWorkSchedule(scheduleRequest))
                 .thenReturn(List.of(response, response1, response2, response3));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/schedule")
+        this.mockMvc.perform(MockMvcRequestBuilders.post(route + "schedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(scheduleRequest)))
@@ -119,9 +121,6 @@ public class ShiftControllerUnitTests {
         ShiftDTO response1 =
                 new ShiftDTO(406L, 27L, storeId, LocalDate.now().plusDays(3),
                 LocalTime.parse("08:30"), LocalTime.parse("14:00"));
-        ShiftDTO response2 =
-                new ShiftDTO(407L, 35L, storeId, LocalDate.now().plusDays(3),
-                LocalTime.parse("08:30"), LocalTime.parse("14:00"));
         ShiftDTO response3 =
                 new ShiftDTO(408L, 10L, storeId, LocalDate.now().plusDays(3),
                 LocalTime.parse("14:00"), LocalTime.parse("17:00"));
@@ -130,9 +129,9 @@ public class ShiftControllerUnitTests {
                 new ScheduleRequest(10L, storeId, response.getShiftDate(),
                         response1.getShiftDate().plusDays(1));
 
-        Mockito.when(shiftService.getWorkSchedule(scheduleRequest)).thenReturn(List.of(response3));
+        Mockito.when(shiftService.getEmployeeSchedule(scheduleRequest)).thenReturn(List.of(response3));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/shift/schedule")
+        this.mockMvc.perform(MockMvcRequestBuilders.post(route + "schedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(scheduleRequest)))
@@ -154,7 +153,7 @@ public class ShiftControllerUnitTests {
 
         Mockito.doNothing().when(shiftService).postWorkSchedule(schedule);
 
-        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/shift/schedule")
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post(route + "new-schedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(schedule)))
@@ -170,7 +169,7 @@ public class ShiftControllerUnitTests {
         Mockito.doNothing().when(shiftService).deleteEmployeeShift(shift.getId());
 
         MvcResult result =
-                this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/shift/{shiftId}", shift.getId()))
+                this.mockMvc.perform(MockMvcRequestBuilders.delete(route + "{shiftId}", shift.getId()))
                         .andExpect(status().isOk()).andReturn();
 
         String content = result.getResponse().getContentAsString();

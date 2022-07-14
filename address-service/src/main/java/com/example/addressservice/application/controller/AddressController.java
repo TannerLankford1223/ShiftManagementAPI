@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/address")
+@RequestMapping("/api/v1/address")
 public class AddressController {
 
     private final AddressServicePort addressService;
@@ -20,6 +20,7 @@ public class AddressController {
     }
 
     @PostMapping("/new-address")
+    @ResponseStatus(HttpStatus.CREATED)
     public AddressDTO saveAddress(@Valid @RequestBody AddressDTO addressDTO) {
         return addressService.saveAddress(addressDTO);
     }

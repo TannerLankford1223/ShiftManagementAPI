@@ -12,22 +12,22 @@ public class GatewayConfig {
     public RouteLocator gatewayRoutes(RouteLocatorBuilder routeBuilder) {
 
         return routeBuilder.routes()
-                .route(r -> r.path("/api/address/**")
+                .route(r -> r.path("/api/v1/address/**")
                         .filters(f -> f.circuitBreaker(config -> config.setName("fallback")
                                 .setFallbackUri("forward:/fallback/address")))
                         .uri("lb://address-service"))
 
-                .route(r -> r.path("/api/employee/**")
+                .route(r -> r.path("/api/v1/employee/**")
                         .filters(f -> f.circuitBreaker(config -> config.setName("fallback")
                                 .setFallbackUri("forward:/fallback/employee")))
                         .uri("lb://employee-service"))
 
-                .route(r -> r.path("/api/shift/**")
+                .route(r -> r.path("/api/v1/shift/**")
                         .filters(f -> f.circuitBreaker(config -> config.setName("fallback")
                                 .setFallbackUri("forward:/fallback/shift")))
                         .uri("lb://shift-service"))
 
-                .route(r -> r.path("/api/email/**")
+                .route(r -> r.path("/api/v1/email/**")
                         .filters(f -> f.circuitBreaker(config -> config.setName("fallback")
                                 .setFallbackUri("forward:/fallback/email")))
                         .uri("lb://email-service"))

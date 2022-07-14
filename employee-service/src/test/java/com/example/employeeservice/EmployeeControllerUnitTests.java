@@ -42,6 +42,8 @@ public class EmployeeControllerUnitTests {
     private Employee employee;
     private EmployeeDTO response;
 
+    private final String route = "/api/v1/employee/";
+
     @BeforeEach
     public void init() {
         this.employeeMapper = new EmployeeMapperImpl();
@@ -56,11 +58,11 @@ public class EmployeeControllerUnitTests {
     public void registerEmployee_ReturnsEmployeeDTO() throws Exception {
         Mockito.when(employeeService.registerEmployee(request)).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/employee/register")
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/employee/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.employee_id").value(employee.getId()))
                 .andExpect(jsonPath("$.first_name").value(employee.getFirstName()))
                 .andExpect(jsonPath("$.last_name").value(employee.getLastName()))
@@ -72,7 +74,7 @@ public class EmployeeControllerUnitTests {
     public void getEmployee_ReturnsEmployeeDTO() throws Exception {
         Mockito.when(employeeService.getEmployee(employee.getId())).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/employee/{employeeId}", employee.getId()))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "{employeeId}", employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.employee_id").value(employee.getId()))
                 .andExpect(jsonPath("$.first_name").value(employee.getFirstName()))
@@ -90,7 +92,7 @@ public class EmployeeControllerUnitTests {
 
         Mockito.when(employeeService.getEmployees()).thenReturn(List.of(response, response1, response2));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/employee/"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(3));
     }
@@ -102,7 +104,7 @@ public class EmployeeControllerUnitTests {
 
         Mockito.when(employeeService.updateEmployee(update)).thenReturn(update);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.put("/api/employee/update/{employeeId}", update.getId())
+        this.mockMvc.perform(MockMvcRequestBuilders.put(route + "update/{employeeId}", update.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(update)))
@@ -118,7 +120,7 @@ public class EmployeeControllerUnitTests {
         Mockito.doNothing().when(employeeService).deleteEmployee(employee.getId());
 
         MvcResult result = this.mockMvc
-                .perform(MockMvcRequestBuilders.delete("/api/employee/{employeeId}", employee.getId()))
+                .perform(MockMvcRequestBuilders.delete(route + "{employeeId}", employee.getId()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -132,7 +134,7 @@ public class EmployeeControllerUnitTests {
         Mockito.when(employeeService.employeeExists(employee.getId())).thenReturn(true);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/api/employee/{employeeId}/check", employee.getId()))
+                .perform(MockMvcRequestBuilders.get(route + "{employeeId}/check", employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(true));
     }
@@ -142,7 +144,7 @@ public class EmployeeControllerUnitTests {
         Mockito.when(employeeService.employeeExists(employee.getId())).thenReturn(false);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/api/employee/{employeeId}/check", employee.getId()))
+                .perform(MockMvcRequestBuilders.get(route + "{employeeId}/check", employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(false));
     }

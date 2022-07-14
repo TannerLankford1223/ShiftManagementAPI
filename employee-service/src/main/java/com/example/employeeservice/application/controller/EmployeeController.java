@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employee")
+@RequestMapping("/api/v1/employee")
 public class EmployeeController {
 
     private final EmployeeServicePort employeeService;
@@ -20,6 +20,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDTO registerEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         return employeeService.registerEmployee(employeeDTO);
     }

@@ -42,7 +42,7 @@ public class AddressControllerUnitTests {
     private Address address;
     private AddressDTO response;
 
-
+    private final String route = "/api/v1/address/";
     @BeforeEach
     public void init() {
         this.addressMapper = new AddressMapperImpl();
@@ -56,11 +56,11 @@ public class AddressControllerUnitTests {
     public void saveAddress_ReturnsAddressDTO() throws Exception {
         Mockito.when(addressService.saveAddress(request)).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/address/new-address")
+        this.mockMvc.perform(MockMvcRequestBuilders.post(route + "new-address")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.store_id").value(address.getStoreId()))
                 .andExpect(jsonPath("$.store_address").value(address.getAddress()))
                 .andExpect(jsonPath("$.city").value(address.getCity()))
@@ -72,7 +72,7 @@ public class AddressControllerUnitTests {
     public void getAddress_ReturnsAddressDTO() throws Exception {
         Mockito.when(addressService.getAddress(request.getStoreId())).thenReturn(response);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/{storeId}", request.getStoreId()))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "{storeId}", request.getStoreId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.store_id").value(address.getStoreId()))
                 .andExpect(jsonPath("$.store_address").value(address.getAddress()))
@@ -90,7 +90,7 @@ public class AddressControllerUnitTests {
 
         Mockito.when(addressService.getAddresses()).thenReturn(List.of(response, response1, response2));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/address-list"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "address-list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(3));
     }
@@ -102,7 +102,7 @@ public class AddressControllerUnitTests {
 
         Mockito.when(addressService.updateAddress(update)).thenReturn(update);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.put("/api/address/update/{storeId}", update.getStoreId())
+        this.mockMvc.perform(MockMvcRequestBuilders.put(route + "update/{storeId}", update.getStoreId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(update)))
@@ -119,7 +119,7 @@ public class AddressControllerUnitTests {
         Mockito.doNothing().when(addressService).deleteAddress(address.getStoreId());
 
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/address/{storeId}", address.getStoreId()))
+                        .delete(route + "{storeId}", address.getStoreId()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -132,7 +132,7 @@ public class AddressControllerUnitTests {
     public void addressExists_ReturnsTrue() throws Exception {
         Mockito.when(addressService.addressExists(address.getStoreId())).thenReturn(true);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/{storeId}/check",
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "{storeId}/check",
                 address.getStoreId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(true));
@@ -142,7 +142,7 @@ public class AddressControllerUnitTests {
     public void addressNonExistent_ReturnsFalse() throws Exception {
         Mockito.when(addressService.addressExists(5000L)).thenReturn(false);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/address/{storeId}/check", 5000L))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "{storeId}/check", 5000L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(false));
     }
