@@ -43,7 +43,7 @@ public class ShiftService implements ShiftServicePort {
         if (isValidShiftRequest(shiftDTO)) {
             Shift shift = mapper.shiftDTOToShift(shiftDTO);
             ShiftDTO returnShiftDTO = mapper.shiftToShiftDTO(shiftRepo.createShift(shift));
-            log.info("Shift with id: " + returnShiftDTO.getShiftId() + " created");
+            log.info("Shift with id " + returnShiftDTO.getShiftId() + " created");
             return returnShiftDTO;
         } else {
             throw new InvalidRequestException("Invalid shift request");
