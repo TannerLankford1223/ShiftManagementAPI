@@ -9,7 +9,6 @@ import com.example.shiftservice.domain.ports.spi.ShiftPersistencePort;
 import com.example.shiftservice.domain.service.ShiftService;
 import com.example.shiftservice.infrastructure.entity.Shift;
 import com.example.shiftservice.infrastructure.exceptionhandler.InvalidRequestException;
-import com.example.shiftservice.infrastructure.exceptionhandler.ShiftNotFoundException;
 import com.example.shiftservice.infrastructure.mapper.ShiftMapper;
 import com.example.shiftservice.infrastructure.mapper.ShiftMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -131,8 +130,8 @@ public class ShiftServiceUnitTests {
     }
 
     @Test
-    public void getEmployeeShift_ShiftNonExistent_ThrowsShiftNotFoundException() {
-        assertThrows(ShiftNotFoundException.class, () -> shiftService.getEmployeeShift(7521L));
+    public void getEmployeeShift_ShiftNonExistent_ThrowsInvalidRequestException() {
+        assertThrows(InvalidRequestException.class, () -> shiftService.getEmployeeShift(7521L));
     }
 
     @Test

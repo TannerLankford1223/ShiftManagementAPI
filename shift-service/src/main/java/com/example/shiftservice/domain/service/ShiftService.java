@@ -8,7 +8,6 @@ import com.example.shiftservice.domain.ports.api.ShiftServicePort;
 import com.example.shiftservice.domain.ports.spi.ShiftPersistencePort;
 import com.example.shiftservice.infrastructure.entity.Shift;
 import com.example.shiftservice.infrastructure.exceptionhandler.InvalidRequestException;
-import com.example.shiftservice.infrastructure.exceptionhandler.ShiftNotFoundException;
 import com.example.shiftservice.infrastructure.mapper.ShiftMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +58,7 @@ public class ShiftService implements ShiftServicePort {
             return mapper.shiftToShiftDTO(shiftOpt.get());
         }
         log.warn("Unable to find shift with id " + shiftId);
-        throw new ShiftNotFoundException(shiftId);
+        throw new InvalidRequestException("Shift with id " + shiftId + " not found");
     }
 
     @Override
