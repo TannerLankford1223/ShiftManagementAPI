@@ -28,7 +28,8 @@ public class AddressService implements AddressServicePort {
     @Override
     public AddressDTO saveAddress(AddressDTO addressDTO) {
         Address address = mapper.addressDTOToAddress(addressDTO);
-        AddressDTO returnAddressDTO =  mapper.addressToAddressDTO(addressRepo.saveAddress(address));
+        AddressDTO returnAddressDTO = mapper.addressToAddressDTO(addressRepo.saveAddress(address));
+        log.info("Store with id " + returnAddressDTO.getStoreId() + " saved");
         return returnAddressDTO;
     }
 
@@ -62,7 +63,8 @@ public class AddressService implements AddressServicePort {
             address.setState(addressDTO.getState());
             address.setZipCode(addressDTO.getZipCode());
 
-           return mapper.addressToAddressDTO(addressRepo.saveAddress(address));
+            log.info("Store with id " + address.getStoreId() + " updated");
+            return mapper.addressToAddressDTO(addressRepo.saveAddress(address));
         }
 
         throw new InvalidRequestException("Store with id " + addressDTO.getStoreId() + " not found");
