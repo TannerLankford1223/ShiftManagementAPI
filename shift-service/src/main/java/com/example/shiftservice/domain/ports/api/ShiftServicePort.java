@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface ShiftServicePort {
 
-    ShiftDTO createShift(ShiftDTO shiftDTO);
+    ShiftDTO saveShift(ShiftDTO shiftDTO);
 
     ShiftDTO getEmployeeShift(long shiftId);
+
+    ShiftDTO updateEmployeeShift(ShiftDTO shiftUpdate);
 
     List<ShiftDTO> getWorkSchedule(ScheduleRequest scheduleRequest);
 

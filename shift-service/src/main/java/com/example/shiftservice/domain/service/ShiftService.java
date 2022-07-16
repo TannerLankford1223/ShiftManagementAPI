@@ -39,11 +39,11 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
-    public ShiftDTO createShift(ShiftDTO shiftDTO) {
+    public ShiftDTO saveShift(ShiftDTO shiftDTO) {
         if (isValidShiftRequest(shiftDTO)) {
             Shift shift = mapper.shiftDTOToShift(shiftDTO);
-            ShiftDTO returnShiftDTO = mapper.shiftToShiftDTO(shiftRepo.createShift(shift));
-            log.info("Shift with id " + returnShiftDTO.getShiftId() + " created");
+            ShiftDTO returnShiftDTO = mapper.shiftToShiftDTO(shiftRepo.saveShift(shift));
+            log.info("Shift with id " + returnShiftDTO.getShiftId() + " saved");
             return returnShiftDTO;
         } else {
             throw new InvalidRequestException("Invalid shift request");
@@ -59,6 +59,24 @@ public class ShiftService implements ShiftServicePort {
         }
 
         throw new InvalidRequestException("Shift with id " + shiftId + " not found");
+    }
+
+    @Transactional
+    @Override
+    public ShiftDTO updateEmployeeShift(ShiftDTO shiftUpdate) {
+        Optional<Shift> shiftOpt = shiftRepo.getShift(shiftUpdate.getShiftId());
+
+        if (shiftOpt.isPresent()) {
+            Shift shift = shiftOpt.get();
+            shift.setEmployeeId(shiftUpdate.getEmployeeId());
+            shift.setShiftDate(shiftUpdate.getShiftDate());
+            shift.setStartTime(shiftUpdate.getStartTime());
+            shift.setEndTime(shiftUpdate.getEndTime());
+            log.info("Shift with id " + shift.getStoreId() + " updated");
+            return mapper.shiftToShiftDTO(shiftRepo.saveShift(shift));
+        }
+
+        throw new InvalidRequestException("Shift with id " + shiftUpdate.getShiftId() + " not found");
     }
 
     @Override
@@ -124,6 +142,8 @@ public class ShiftService implements ShiftServicePort {
     @Override
     public boolean isValidShiftRequest(ShiftDTO shiftDTO) {
         if (!employeeClient.employeeExists(shiftDTO.getEmployeeId())) {
+            return false;
+        } else if (!addressClient.addressExists(shiftDTO.getStoreId())) {
             return false;
         } else if (shiftDTO.getShiftDate().isBefore(LocalDate.now())) {
             return false;

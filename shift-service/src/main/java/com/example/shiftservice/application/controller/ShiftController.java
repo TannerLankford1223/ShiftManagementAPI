@@ -22,13 +22,20 @@ public class ShiftController {
 
     @PostMapping("/new-shift")
     @ResponseStatus(HttpStatus.CREATED)
-    public ShiftDTO createShift(@Valid @RequestBody ShiftDTO shift) {
-        return shiftService.createShift(shift);
+    public ShiftDTO createEmployeeShift(@Valid @RequestBody ShiftDTO shift) {
+        return shiftService.saveShift(shift);
     }
 
     @GetMapping("/{shiftId}")
     public ShiftDTO getEmployeeShift(@PathVariable long shiftId) {
         return shiftService.getEmployeeShift(shiftId);
+    }
+
+    @PutMapping("/update/{shiftId}")
+    public ShiftDTO updateEmployeeShift(@PathVariable long shiftId, @Valid @RequestBody ShiftDTO shiftUpdate) {
+        shiftUpdate.setShiftId(shiftId);
+
+        return shiftService.updateEmployeeShift(shiftUpdate);
     }
 
     // Returns list of shifts for an employee for a given time period if the employee ID is specified in the
