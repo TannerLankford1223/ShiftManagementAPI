@@ -1,5 +1,7 @@
 package com.example.gatewayservice;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,22 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class FallbackController {
 
     @GetMapping("/address")
-    public String productsFallback() {
-        return "Unable to connect to address service";
+    public ResponseEntity<String> addressFallback() {
+        return new ResponseEntity<>("Gateway was unable to connect to the address service",
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/employee")
-    public String ordersFallback() {
-        return "Unable to connect to employee service";
+    public ResponseEntity<String> employeeFallback() {
+        return new ResponseEntity<>("Gateway was unable to connect to the employee service",
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/shift")
-    public String customersFallback() {
-        return "Unable to connect to shift service";
+    public ResponseEntity<String> shiftFallback() {
+        return new ResponseEntity<>("Gateway was unable to connect to the shift service",
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/email")
-    public String paymentsFallback() {
-        return "Unable to connect to email service";
+    public ResponseEntity<String> emailFallback() {
+        return new ResponseEntity<>("Gateway was unable to connect to the email service",
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
