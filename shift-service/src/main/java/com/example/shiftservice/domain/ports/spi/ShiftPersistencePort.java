@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ShiftPersistencePort {
 
-    Shift createShift(Shift shift);
+    Shift saveShift(Shift shift);
 
     Optional<Shift> getShift(long shiftId);
 

@@ -19,7 +19,7 @@ public class ShiftJpaAdapter implements ShiftPersistencePort {
     }
 
     @Override
-    public Shift createShift(Shift shift) {
+    public Shift saveShift(Shift shift) {
         return shiftRepo.save(shift);
     }
 
