@@ -9,7 +9,7 @@ public class AddressClientFallback implements AddressClient {
 
     @Override
     public boolean addressExists(long storeId) {
-        log.error("Unable to connect to address-service");
+        log.warn("Unable to connect to address-service");
         return false;
     }
 }
