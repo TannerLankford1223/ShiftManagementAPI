@@ -28,8 +28,6 @@ public class GatewayConfig {
                         .uri("lb://shift-service"))
 
                 .route(r -> r.path("/api/v1/email/**")
-                        .filters(f -> f.circuitBreaker(config -> config.setName("fallback")
-                                .setFallbackUri("forward:/fallback/email")))
                         .uri("lb://email-service"))
                 .build();
     }
