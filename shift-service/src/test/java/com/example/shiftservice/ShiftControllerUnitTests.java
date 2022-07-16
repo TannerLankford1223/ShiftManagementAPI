@@ -61,7 +61,7 @@ public class ShiftControllerUnitTests {
 
     @Test
     public void createShift_ReturnsShiftResponse() throws Exception {
-        Mockito.when(shiftService.createShift(request)).thenReturn(response);
+        Mockito.when(shiftService.saveShift(request)).thenReturn(response);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(route + "new-shift")
                         .contentType(MediaType.APPLICATION_JSON)

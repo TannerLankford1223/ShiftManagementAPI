@@ -59,13 +59,15 @@ public class ShiftServiceUnitTests {
     @Test
     public void isValidShiftRequest_ShiftIsValid_ReturnsTrue() {
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
 
         assertTrue(shiftService.isValidShiftRequest(shiftDTO));
     }
 
     @Test
-    public void isValidShiftRequest_InvalidStartTime_ThrowsInvalidShiftTimeException() {
+    public void isValidShiftRequest_InvalidStartTime_ReturnsFalse() {
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
 
         ShiftDTO badRequest = new ShiftDTO(16L, storeId, LocalDate.now().plusDays(14),
                 LocalTime.parse("07:00"), LocalTime.parse("15:00"));
@@ -74,8 +76,9 @@ public class ShiftServiceUnitTests {
     }
 
     @Test
-    public void isValidShiftRequest_InvalidEndTime_ThrowsInvalidShiftTimeException() {
+    public void isValidShiftRequest_InvalidEndTime_ReturnsFalse() {
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
 
         ShiftDTO badRequest = new ShiftDTO(16L, storeId, LocalDate.now().plusDays(14),
                 LocalTime.parse("08:00"), LocalTime.parse("20:00"));
@@ -84,8 +87,9 @@ public class ShiftServiceUnitTests {
     }
 
     @Test
-    public void isValidShiftRequest_InvalidShiftDate_ThrowsInvalidShiftTimeException() {
+    public void isValidShiftRequest_InvalidShiftDate_ReturnsFalse() {
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
 
         ShiftDTO badRequest =
                 new ShiftDTO(16L, storeId, LocalDate.now().minusDays(14),
@@ -95,12 +99,25 @@ public class ShiftServiceUnitTests {
     }
 
     @Test
+    public void isValidShiftRequest_InvalidStoreId_ReturnsFalse() {
+        Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(1921L)).thenReturn(false);
+
+        ShiftDTO badRequest =
+                new ShiftDTO(16L, 1921L, LocalDate.now().plusDays(14),
+                        LocalTime.parse("08:00"), LocalTime.parse("17:00"));
+
+        assertFalse(shiftService.isValidShiftRequest(badRequest));
+    }
+
+    @Test
     public void createShift_ReturnsShiftDTO() {
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
 
-        Mockito.when(shiftRepo.createShift(shift)).thenReturn(shift);
+        Mockito.when(shiftRepo.saveShift(shift)).thenReturn(shift);
 
-        ShiftDTO shiftResponse = shiftService.createShift(shiftDTO);
+        ShiftDTO shiftResponse = shiftService.saveShift(shiftDTO);
 
         assertEquals(16L, shiftResponse.getEmployeeId());
         assertEquals(LocalDate.now().plusDays(1), shiftResponse.getShiftDate());
@@ -110,10 +127,11 @@ public class ShiftServiceUnitTests {
     @Test
     public void createShift_DateInvalid_ReturnsInvalidRequestException() {
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
 
        shiftDTO.setShiftDate(LocalDate.now().minusDays(3));
 
-       assertThrows(InvalidRequestException.class, () -> shiftService.createShift(shiftDTO));
+       assertThrows(InvalidRequestException.class, () -> shiftService.saveShift(shiftDTO));
     }
 
     @Test
@@ -132,6 +150,36 @@ public class ShiftServiceUnitTests {
     @Test
     public void getEmployeeShift_ShiftNonExistent_ThrowsInvalidRequestException() {
         assertThrows(InvalidRequestException.class, () -> shiftService.getEmployeeShift(7521L));
+    }
+
+    @Test
+    public void udpateShift_ShiftExists_ReturnsShiftDTO() {
+        Shift shiftUpdate = new Shift(47L,
+                shift.getStoreId(),
+                shift.getShiftDate().plusDays(2),
+                shift.getStartTime(),
+                shift.getEndTime());
+        shiftUpdate.setId(shift.getId());
+
+        Mockito.when(shiftRepo.getShift(shiftUpdate.getId())).thenReturn(Optional.of(shift));
+        Mockito.when(shiftRepo.saveShift(shiftUpdate)).thenReturn(shiftUpdate);
+
+        ShiftDTO updatedShift = shiftService.updateEmployeeShift(mapper.shiftToShiftDTO(shiftUpdate));
+
+        assertEquals(0L, updatedShift.getShiftId());
+        assertEquals(47L, updatedShift.getEmployeeId());
+        assertEquals(LocalDate.now().plusDays(3), updatedShift.getShiftDate());
+    }
+
+    @Test
+    public void updateShift_ShiftNonExistent_ThrowsInvalidRequestException() {
+        Mockito.when(shiftRepo.getShift(92L)).thenReturn(Optional.empty());
+
+        ShiftDTO fakeShiftUpdate = new ShiftDTO(43L, 7452L, LocalDate.now().plusDays(1),
+                LocalTime.parse("08:00"), LocalTime.parse("15:30"));
+        fakeShiftUpdate.setShiftId(92L);
+
+        assertThrows(InvalidRequestException.class, () -> shiftService.updateEmployeeShift(fakeShiftUpdate));
     }
 
     @Test
@@ -205,8 +253,10 @@ public class ShiftServiceUnitTests {
         ShiftDTO shiftDTO1 = new ShiftDTO(shift1.getEmployeeId(), shift1.getStoreId(), shift1.getShiftDate(),
                 shift1.getStartTime(), shift1.getEndTime());
 
-        Mockito.when(employeeClient.employeeExists(shift.getEmployeeId())).thenReturn(true);
-        Mockito.when(employeeClient.employeeExists(shift1.getEmployeeId())).thenReturn(true);
+        Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
+        Mockito.when(employeeClient.employeeExists(shiftDTO1.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO1.getStoreId())).thenReturn(true);
         Mockito.doNothing().when(shiftRepo).postWorkSchedule(List.of(shift, shift1));
 
         shiftService.postWorkSchedule(List.of(shiftDTO, shiftDTO1));
@@ -223,7 +273,9 @@ public class ShiftServiceUnitTests {
 
 
         Mockito.when(employeeClient.employeeExists(shiftDTO.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO.getStoreId())).thenReturn(true);
         Mockito.when(employeeClient.employeeExists(shiftDTO1.getEmployeeId())).thenReturn(true);
+        Mockito.when(addressClient.addressExists(shiftDTO1.getStoreId())).thenReturn(true);
 
         assertThrows(InvalidRequestException.class, () -> shiftService
                 .postWorkSchedule(List.of(shiftDTO, shiftDTO1)));
