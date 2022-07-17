@@ -34,22 +34,6 @@ public class GatewayConfig {
                         .filters(f -> f.rewritePath("/api/v1/email/api-docs", "/v3/api-docs"))
                         .uri("lb://email-service"))
 
-//                .route(r -> r.path("/v3/api-docs/employee-service")
-//                        .filters(f -> f.rewritePath("/v3/api-docs/employee-service", "/v3/api-docs"))
-//                        .uri("lb://employee-service"))
-
-                .route(r -> r.path("/v3/api-docs/address-service")
-                        .filters(f -> f.rewritePath("/v3/api-docs/address-service", "/v3/api-docs"))
-                        .uri("lb://address-service"))
-
-                .route(r -> r.path("/v3/api-docs/shift-service")
-                        .filters(f -> f.rewritePath("/v3/api-docs/shift-service", "/v3/api-docs"))
-                        .uri("lb://shift-service"))
-
-                .route(r -> r.path("/v3/api-docs/email-service")
-                        .filters(f -> f.rewritePath("/v3/api-docs/email-service", "/v3/api-docs"))
-                        .uri("lb://email-service"))
-
                 .build();
     }
 }
