@@ -36,12 +36,12 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<Object> handleException(Exception ex) {
-        ErrorModel model = new ErrorModel(HttpStatus.NOT_FOUND, "Request not found",
+        ErrorModel model = new ErrorModel(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(),
                 Arrays.toString(ex.getStackTrace()));
 
-        return new ResponseEntity<>(model, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(model, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
