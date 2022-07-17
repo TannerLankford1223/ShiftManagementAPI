@@ -8,6 +8,9 @@ import com.example.addressservice.infrastructure.exceptionhandler.InvalidRequest
 import com.example.addressservice.infrastructure.mapper.AddressMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +36,7 @@ public class AddressService implements AddressServicePort {
         return returnAddressDTO;
     }
 
+    @Cacheable(cacheNames = "addresses", key = "storeId")
     @Override
     public AddressDTO getAddress(long storeId) {
         Optional<Address> addressOpt = addressRepo.getAddress(storeId);
@@ -51,6 +55,7 @@ public class AddressService implements AddressServicePort {
                 .collect(Collectors.toList());
     }
 
+    @CachePut(cacheNames = "addresses", key = "#addressDTO.storeId")
     @Transactional
     @Override
     public AddressDTO updateAddress(AddressDTO addressDTO) {
@@ -70,6 +75,7 @@ public class AddressService implements AddressServicePort {
         throw new InvalidRequestException("Store with id " + addressDTO.getStoreId() + " not found");
     }
 
+    @CacheEvict(cacheNames = "addresses", key = "#storeId")
     @Transactional
     @Override
     public void deleteAddress(long storeId) {

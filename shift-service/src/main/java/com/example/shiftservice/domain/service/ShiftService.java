@@ -11,6 +11,10 @@ import com.example.shiftservice.infrastructure.exceptionhandler.InvalidRequestEx
 import com.example.shiftservice.infrastructure.mapper.ShiftMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -51,6 +55,7 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
+    @Cacheable(cacheNames = "shifts", key = "shiftId")
     public ShiftDTO getEmployeeShift(long shiftId) {
         Optional<Shift> shiftOpt = shiftRepo.getShift(shiftId);
 
@@ -63,6 +68,8 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
+    @CachePut(cacheNames = "shifts", key = "#shiftUpdate.shiftId")
+    @CacheEvict(cacheNames = "workSchedules", allEntries = true)
     public ShiftDTO updateEmployeeShift(ShiftDTO shiftUpdate) {
         Optional<Shift> shiftOpt = shiftRepo.getShift(shiftUpdate.getShiftId());
 
@@ -80,6 +87,7 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
+    @Cacheable(cacheNames = "workSchedules")
     public List<ShiftDTO> getWorkSchedule(ScheduleRequest scheduleRequest) {
         if (scheduleRequest.getEndDate().isBefore(scheduleRequest.getStartDate())) {
             throw new InvalidRequestException("The end date of the time period must be on or after the start date");
@@ -113,6 +121,7 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
+    @CacheEvict(cacheNames = "workSchedule", allEntries = true)
     public void postWorkSchedule(List<ShiftDTO> shiftDTOS) {
         List<Shift> shifts = new ArrayList<>();
 
@@ -129,6 +138,10 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "workSchedule", allEntries = true),
+            @CacheEvict(cacheNames = "shifts", key = "#shiftId")
+    })
     public void deleteEmployeeShift(long shiftId) {
 
         if (shiftRepo.shiftExists(shiftId)) {

@@ -8,6 +8,9 @@ import com.example.employeeservice.infrastructure.exceptionhandler.InvalidReques
 import com.example.employeeservice.infrastructure.mapper.EmployeeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +36,7 @@ public class EmployeeService implements EmployeeServicePort {
         return returnEmployeeDTO;
     }
 
+    @Cacheable(cacheNames = "employees", key = "employeeId")
     @Override
     public EmployeeDTO getEmployee(long employeeId) {
         Optional<Employee> employeeOpt = employeeRepo.getEmployee(employeeId);
@@ -53,6 +57,7 @@ public class EmployeeService implements EmployeeServicePort {
                 .collect(Collectors.toList());
     }
 
+    @CachePut(cacheNames = "employees", key = "#employeeDTO.id")
     @Transactional
     @Override
     public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
@@ -72,6 +77,7 @@ public class EmployeeService implements EmployeeServicePort {
         throw new InvalidRequestException("Employee with id " + employeeDTO.getId() + " not found");
     }
 
+    @CacheEvict(cacheNames = "employees", key = "#employeeId")
     @Transactional
     @Override
     public void deleteEmployee(long employeeId) {
