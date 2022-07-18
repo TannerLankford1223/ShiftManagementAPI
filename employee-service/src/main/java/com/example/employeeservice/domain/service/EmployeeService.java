@@ -36,7 +36,7 @@ public class EmployeeService implements EmployeeServicePort {
         return returnEmployeeDTO;
     }
 
-    @Cacheable(cacheNames = "employees", key = "employeeId")
+    @Cacheable(cacheNames = "employees")
     @Override
     public EmployeeDTO getEmployee(long employeeId) {
         Optional<Employee> employeeOpt = employeeRepo.getEmployee(employeeId);

@@ -55,7 +55,7 @@ public class ShiftService implements ShiftServicePort {
     }
 
     @Override
-    @Cacheable(cacheNames = "shifts", key = "shiftId")
+    @Cacheable(cacheNames = "shifts")
     public ShiftDTO getEmployeeShift(long shiftId) {
         Optional<Shift> shiftOpt = shiftRepo.getShift(shiftId);
 
@@ -121,7 +121,7 @@ public class ShiftService implements ShiftServicePort {
 
     @Transactional
     @Override
-    @CacheEvict(cacheNames = "workSchedule", allEntries = true)
+    @CacheEvict(cacheNames = "workSchedules", allEntries = true)
     public void postWorkSchedule(List<ShiftDTO> shiftDTOS) {
         List<Shift> shifts = new ArrayList<>();
 
@@ -139,7 +139,7 @@ public class ShiftService implements ShiftServicePort {
     @Transactional
     @Override
     @Caching(evict = {
-            @CacheEvict(cacheNames = "workSchedule", allEntries = true),
+            @CacheEvict(cacheNames = "workSchedules", allEntries = true),
             @CacheEvict(cacheNames = "shifts", key = "#shiftId")
     })
     public void deleteEmployeeShift(long shiftId) {

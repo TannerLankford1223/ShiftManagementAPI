@@ -36,7 +36,7 @@ public class AddressService implements AddressServicePort {
         return returnAddressDTO;
     }
 
-    @Cacheable(cacheNames = "addresses", key = "storeId")
+    @Cacheable(cacheNames = "addresses")
     @Override
     public AddressDTO getAddress(long storeId) {
         Optional<Address> addressOpt = addressRepo.getAddress(storeId);
