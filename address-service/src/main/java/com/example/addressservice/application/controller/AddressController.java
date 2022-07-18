@@ -33,7 +33,7 @@ public class AddressController {
         return addressService.getAddress(storeId);
     }
 
-    @GetMapping("/address-list")
+    @GetMapping("/")
     @Operation(summary = "Returns a list of all store address information")
     public List<AddressDTO> getAddressList() {
         return addressService.getAddresses();
@@ -47,7 +47,7 @@ public class AddressController {
     }
 
     @DeleteMapping("/{storeId}")
-    @Operation(summary = "Delets a store, if it exists")
+    @Operation(summary = "Deletes a store, if it exists")
     public ResponseEntity<String> deleteAddress(@PathVariable long storeId) {
         addressService.deleteAddress(storeId);
         return new ResponseEntity<>("Store with id " + storeId + " deleted", HttpStatus.OK);
