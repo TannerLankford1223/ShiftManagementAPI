@@ -90,7 +90,7 @@ public class AddressControllerUnitTests {
 
         Mockito.when(addressService.getAddresses()).thenReturn(List.of(response, response1, response2));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(route + "address-list"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(route))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(3));
     }
