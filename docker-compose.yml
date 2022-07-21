@@ -1,0 +1,109 @@
+version: '3'
+services:
+  discovery-service:
+    image: discovery-server:latest
+    container_name: discovery
+    ports:
+      - "8761:8761"
+  gateway-service:
+    image: gateway-server:latest
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery-service
+      - address-service
+      - employee-service
+      - shift-service
+      - email-service
+    environment:
+      - EUREKA_SERVER=http://discovery-service:8761/eureka
+  address-service:
+    image: address-server:latest
+    container_name: address
+    ports:
+      - "8484:8484"
+    depends_on:
+      - discovery-service
+      - addressDB
+    environment:
+      - SERVER_PORT=8484
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://addressDB:5432/address
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - EUREKA_SERVER=http://discovery-service:8761/eureka
+  employee-service:
+    image: employee-server:latest
+    container_name: employee
+    ports:
+      - "8282:8282"
+    depends_on:
+      - discovery-service
+      - employeeDB
+    environment:
+      - SERVER_PORT=8282
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://employeeDB:5432/employee
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - EUREKA_SERVER=http://discovery-service:8761/eureka
+  shift-service:
+    image: shift-server:latest
+    container_name: shift
+    ports:
+      - "8181:8181"
+    depends_on:
+      - discovery-service
+      - shiftDB
+      - address-service
+      - employee-service
+    environment:
+      - SERVER_PORT=8181
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://shiftDB:5432/shift
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - EUREKA_SERVER=http://discovery-service:8761/eureka
+  email-service:
+    image: email-server:latest
+#    build: .
+#    volumes:
+#      - .:/email-service
+#      - ~/.m2:/root/.m2
+#    working_dir: /email-service
+    container_name: email
+    ports:
+      - "8383:8383"
+      - "587"
+    depends_on:
+      - discovery-service
+      - shift-service
+      - employee-service
+    environment:
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD}
+      - EUREKA_SERVER=http://discovery-service:8761/eureka
+  addressDB:
+    image: 'postgres:14-alpine'
+    container_name: addressDB
+    environment:
+      - POSTGRES_DB=address
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+  employeeDB:
+    image: 'postgres:14-alpine'
+    container_name: employeeDB
+    environment:
+      - POSTGRES_DB=employee
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+  shiftDB:
+    image: 'postgres:14-alpine'
+    container_name: shiftDB
+    environment:
+      - POSTGRES_DB=shift
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
