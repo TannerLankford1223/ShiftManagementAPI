@@ -248,7 +248,7 @@ public class ShiftServiceUnitTests {
     }
     @Test
     public void postWorkSchedule_ShiftRequestsValid_ExecutesSuccessfully() {
-        Shift shift1 = new Shift(73L, storeId, LocalDate.of(2022, 7, 16),
+        Shift shift1 = new Shift(73L, storeId, LocalDate.now().plusDays(5),
                 LocalTime.parse("08:00"), LocalTime.parse("15:30"));
         ShiftDTO shiftDTO1 = new ShiftDTO(shift1.getEmployeeId(), shift1.getStoreId(), shift1.getShiftDate(),
                 shift1.getStartTime(), shift1.getEndTime());
