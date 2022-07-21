@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface EmployeeClient {
 
     @GetMapping("/api/v1/employee/{employeeId}/check")
-    boolean employeeExists(@PathVariable long employeeId);
+    boolean employeeExists(@PathVariable(value = "employeeId") long employeeId);
 }

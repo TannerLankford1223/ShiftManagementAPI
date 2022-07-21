@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface AddressClient {
 
     @GetMapping("/api/v1/address/{storeId}/check")
-    boolean addressExists(@PathVariable long storeId);
+    boolean addressExists(@PathVariable(value = "storeId") long storeId);
 }
