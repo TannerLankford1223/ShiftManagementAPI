@@ -67,11 +67,6 @@ services:
       - EUREKA_SERVER=http://discovery-service:8761/eureka
   email-service:
     image: email-server:latest
-#    build: .
-#    volumes:
-#      - .:/email-service
-#      - ~/.m2:/root/.m2
-#    working_dir: /email-service
     container_name: email
     ports:
       - "8383:8383"
@@ -83,8 +78,8 @@ services:
     environment:
       - SPRING_MAIL_HOST=smtp.gmail.com
       - SPRING_MAIL_PORT=587
-      - SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME}
-      - SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD}
+      - SPRING_MAIL_USERNAME
+      - SPRING_MAIL_PASSWORD
       - EUREKA_SERVER=http://discovery-service:8761/eureka
   addressDB:
     image: 'postgres:14-alpine'
