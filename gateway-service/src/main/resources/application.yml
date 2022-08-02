@@ -1,0 +1,119 @@
+server:
+  port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+    register-with-eureka: false
+  instance:
+    prefer-ip-address: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      addressServiceFallback:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+      employeeServiceFallback:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+      shiftServiceFallback:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+      emailServiceFallback:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+    timelimiter:
+      instances:
+        addressServiceFallback:
+          timeoutDuration: 2s
+        employeeServiceFallback:
+          timeoutDuration: 2s
+        shiftServiceFallback:
+          timeoutDuration: 2s
+        emailServiceFallback:
+          timeoutDuration: 10s
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: address-service
+          uri: lb://address-service
+          predicates:
+            - Path=/api/v1/address/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: addressServiceFallback
+                fallbackUri: forward:/fallback/address
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/v1/employee/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: employeeServiceFallback
+                fallbackUri: forward:/fallback/employee
+        - id: shift-service
+          uri: lb://shift-service
+          predicates:
+            - Path=/api/v1/shift/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: shiftServiceFallback
+                fallbackUri: forward:/fallback/shift
+        - id: email-service
+          uri: lb://email-service
+          predicates:
+            - Path=/api/v1/email/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: emailServiceFallback
+                fallbackUri: forward:/fallback/email
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:9900/auth/realms/shift-management
+        registration:
+          shift-management-client:
+            provider: keycloak
+            client-id: shift-management-client
+            client-secret: ${KEYCLOAK_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+
+# Allows to debug the authorization flow
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: debug
