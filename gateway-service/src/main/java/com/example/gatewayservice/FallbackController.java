@@ -27,4 +27,10 @@ public class FallbackController {
         return new ResponseEntity<>("Gateway was unable to connect to the shift service",
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @GetMapping("/email")
+    public ResponseEntity<String> emailFallback() {
+        return new ResponseEntity<>("Gateway was unable to connect to the email service",
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
