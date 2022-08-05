@@ -16,8 +16,10 @@ services:
       - employee-service
       - shift-service
       - email-service
+      - zipkin
     environment:
       - EUREKA_SERVER=http://discovery-service:8761/eureka
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
   address-service:
     image: address-server:latest
     container_name: address
@@ -26,6 +28,7 @@ services:
     depends_on:
       - discovery-service
       - addressDB
+      - zipkin
     environment:
       - SERVER_PORT=8484
       - SPRING_DATASOURCE_URL=jdbc:postgresql://addressDB:5432/address
@@ -33,6 +36,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
       - EUREKA_SERVER=http://discovery-service:8761/eureka
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
   employee-service:
     image: employee-server:latest
     container_name: employee
@@ -41,6 +45,7 @@ services:
     depends_on:
       - discovery-service
       - employeeDB
+      - zipkin
     environment:
       - SERVER_PORT=8282
       - SPRING_DATASOURCE_URL=jdbc:postgresql://employeeDB:5432/employee
@@ -48,6 +53,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
       - EUREKA_SERVER=http://discovery-service:8761/eureka
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
   shift-service:
     image: shift-server:latest
     container_name: shift
@@ -58,6 +64,7 @@ services:
       - shiftDB
       - address-service
       - employee-service
+      - zipkin
     environment:
       - SERVER_PORT=8181
       - SPRING_DATASOURCE_URL=jdbc:postgresql://shiftDB:5432/shift
@@ -65,6 +72,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
       - EUREKA_SERVER=http://discovery-service:8761/eureka
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
   email-service:
     image: email-server:latest
     container_name: email
@@ -75,12 +83,21 @@ services:
       - discovery-service
       - shift-service
       - employee-service
+      - zipkin
     environment:
       - SPRING_MAIL_HOST=smtp.gmail.com
       - SPRING_MAIL_PORT=587
       - SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME}
       - SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD}
       - EUREKA_SERVER=http://discovery-service:8761/eureka
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - "9411:9411"
   addressDB:
     image: 'postgres:14-alpine'
     container_name: addressDB

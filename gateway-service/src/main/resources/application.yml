@@ -94,3 +94,5 @@ spring:
               args:
                 name: emailServiceFallback
                 fallbackUri: forward:/fallback/email
+  zipkin:
+    base-url: ${SPRING_ZIPKIN_BASE_URL:http://localhost:9411/}
