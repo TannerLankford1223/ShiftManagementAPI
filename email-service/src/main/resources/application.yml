@@ -32,6 +32,8 @@ spring:
           auth: true
           starttls:
             enable: true
+  application:
+    name: email-service
 
 
 

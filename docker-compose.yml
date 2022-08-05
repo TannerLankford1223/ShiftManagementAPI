@@ -18,7 +18,6 @@ services:
       - email-service
     environment:
       - EUREKA_SERVER=http://discovery-service:8761/eureka
-      - KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
   address-service:
     image: address-server:latest
     container_name: address

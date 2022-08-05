@@ -57,8 +57,6 @@ spring:
       discovery:
         locator:
           enabled: true
-      default-filters:
-        - TokenRelay
       routes:
         - id: address-service
           uri: lb://address-service
@@ -96,24 +94,3 @@ spring:
               args:
                 name: emailServiceFallback
                 fallbackUri: forward:/fallback/email
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:9900/auth/realms/shift-management
-        registration:
-          shift-management-client:
-            provider: keycloak
-            client-id: shift-management-client
-            client-secret: ${KEYCLOAK_SECRET}
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
-
-# Allows to debug the authorization flow
-logging:
-  level:
-    org:
-      springframework:
-        security:
-          web: debug
