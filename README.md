@@ -99,7 +99,8 @@ This project was meant to be a starting point for a larger project that encompas
 employee management for a company that may have multiple stores, or places of business. However, it is in need of an
 architecture redesign beforehand. Currently, the shift and email services must rely on OpenFeign clients to make HTTP 
 requests to other services repeatedly. This, in my opinion, tightly couples the services and leads to a brittle system
-overall. The solution to the redesign for version 2.0 is to implement the command query responsibility segregation
+overall. The solution to the redesign, for version 2.0, is to implement the command query responsibility segregation
 (CQRS) and event sourcing design patterns using a PostgreSQL database for creating and updating entities, a MongoDB
-database with a unified view of shifts, employee, and store information and a Kafka event bus to maintain 
-synchronization between the tables. 
+database with a unified view of shifts, employee, and store information along with a Kafka event bus to maintain 
+synchronization between the tables. For more information on CQRS and event sourcing click 
+[here](https://www.baeldung.com/cqrs-event-sourcing-java).
