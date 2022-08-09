@@ -77,10 +77,12 @@ all instances of said service.
 | Shift    | Create, read, and update employee shifts                                     | /api/v1/shift/**    |
 | Email    | Company can send weekly shift schedules and employee shift updates via email | /api/v1/email/**    |
 
+````
 For more information on the available endpoints for each service visit http://localhost:8080/swagger-ui.html 
 once the application is started and using the search bar provided by Swagger enter the name of the service in the form 
 of "/v3/api-docs/{route}". For instance, to view all endpoints for the address service you can search
 "/v3/api-docs/api/v1/address".
+````
 
 ### Zipkin Distributed Tracing
 
@@ -94,10 +96,10 @@ To view all services currently up the Eureka discovery server can be reached on 
 ## Updates
 
 This project was meant to be a starting point for a larger project that encompasses more services pertaining to 
-employee management for a company that may have multiple stores, or places of business. However, it is in need of an \
+employee management for a company that may have multiple stores, or places of business. However, it is in need of an
 architecture redesign beforehand. Currently, the shift and email services must rely on OpenFeign clients to make HTTP 
 requests to other services repeatedly. This, in my opinion, tightly couples the services and leads to a brittle system
 overall. The solution to the redesign for version 2.0 is to implement the command query responsibility segregation
 (CQRS) and event sourcing design patterns using a PostgreSQL database for creating and updating entities, a MongoDB
-database with a unified view of shifts with employee and store information and Kafka as an event bus to maintain 
+database with a unified view of shifts, employee, and store information and a Kafka event bus to maintain 
 synchronization between the tables. 
