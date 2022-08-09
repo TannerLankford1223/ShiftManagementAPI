@@ -63,6 +63,7 @@ spring:
           predicates:
             - Path=/api/v1/address/**
           filters:
+            - RewritePath=/api/v1/address/(?<path>.*), /$\{path}
             - name: CircuitBreaker
               args:
                 name: addressServiceFallback
@@ -72,6 +73,7 @@ spring:
           predicates:
             - Path=/api/v1/employee/**
           filters:
+            - RewritePath=/api/v1/employee/(?<path>.*), /$\{path}
             - name: CircuitBreaker
               args:
                 name: employeeServiceFallback
@@ -81,6 +83,7 @@ spring:
           predicates:
             - Path=/api/v1/shift/**
           filters:
+            - RewritePath=/api/v1/shift/(?<path>.*), /$\{path}
             - name: CircuitBreaker
               args:
                 name: shiftServiceFallback
@@ -90,9 +93,16 @@ spring:
           predicates:
             - Path=/api/v1/email/**
           filters:
+            - RewritePath=/api/v1/email/(?<path>.*), /$\{path}
             - name: CircuitBreaker
               args:
                 name: emailServiceFallback
                 fallbackUri: forward:/fallback/email
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
   zipkin:
     base-url: ${SPRING_ZIPKIN_BASE_URL:http://localhost:9411/}
