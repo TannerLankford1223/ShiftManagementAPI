@@ -78,10 +78,12 @@ all instances of said service.
 | Email    | Company can send weekly shift schedules and employee shift updates via email | /api/v1/email/**    |
 
 ````
-For more information on the available endpoints for each service visit http://localhost:8080/swagger-ui.html 
-once the application is started and using the search bar provided by Swagger enter the name of the service in the form 
-of "/v3/api-docs/{route}". For instance, to view all endpoints for the address service you can search
-"/v3/api-docs/api/v1/address".
+For more information on the available endpoints for each service visit
+http://localhost:8080/swagger-ui.html once the application is started.
+
+Using the search bar provided by Swagger enter the name of the service
+in the form of "/v3/api-docs/{route}". For instance, to view all endpoints
+for the address service you can search "/v3/api-docs/api/v1/address".
 ````
 
 ### Zipkin Distributed Tracing
